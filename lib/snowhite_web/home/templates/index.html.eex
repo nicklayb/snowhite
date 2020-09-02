@@ -1,0 +1,3 @@
+<%= for module <- modules() do %>
+  <%= live_render(@conn, module) %>
+<% end %>
