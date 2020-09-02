@@ -1,5 +1,5 @@
 defmodule SnowhiteWeb.Home.View do
   use SnowhiteWeb, {:view, path: "home/templates"}
 
-  def modules, do: Snowhite.Module.modules()
+  def modules, do: Snowhite.modules()
 end
