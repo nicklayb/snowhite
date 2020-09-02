@@ -1,6 +1,8 @@
-$black: #000;
-$white: #FFF;
+$black: #000 !default;
+$white: #FFF !default;
 
-$background-color: $black;
-$foreground-color: $white;
-$module-inner-padding: 10px;
+$grid-layout-proportions: 33% 34% 33% !default;
+$font-family: 'Roboto Mono', monospace;
+$background-color: $black !default;
+$foreground-color: $white !default;
+$module-inner-padding: 10px !default;

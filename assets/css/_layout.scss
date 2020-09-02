@@ -1,9 +1,27 @@
+body {
+  height: 100vh;
+  background-color: $background-color;
+  color: $foreground-color;
+}
+
 .layout {
   height: 100vh;
   width: 100vw;
   display: grid;
-  grid-template-columns: 33% 34% 33%;
+  grid-template-columns: $grid-layout-proportions;
   .pane {
-    padding: 20px;
+    padding: $module-inner-padding;
+
+    &.left {
+      text-align: left;
+    }
+
+    &.center {
+      text-align: center;
+    }
+
+    &.right {
+      text-align: right;
+    }
   }
 }

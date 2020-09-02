@@ -1,5 +1,4 @@
 defmodule Snowhite.Builder do
-  alias Snowhite.Helpers.Map, as: MapHelpers
   alias Snowhite.Builder.Layout
 
   defmacro register_module(position, module, options \\ []) do
@@ -11,18 +10,17 @@ defmodule Snowhite.Builder do
 
     options = [{:_position, position} | options]
 
+    module_def = {module, options}
+
     quote do
-      @layout MapHelpers.append(
-                @layout,
-                unquote(position),
-                {unquote(module), unquote(options)}
-              )
+      @layout Layout.put_module(@layout, unquote(position), unquote(module_def))
     end
   end
 
   defmacro __using__(_) do
     quote do
       import Snowhite.Builder
+      import Snowhite.Helpers.Timing
       @before_compile {Snowhite.Builder, :__before_compile__}
       @layout %Snowhite.Builder.Layout{}
     end

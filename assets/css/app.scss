@@ -4,9 +4,4 @@
 @import "layout";
 @import "helpers";
 @import "modules/modules";
-
-body {
-  height: 100vh;
-  background-color: $background-color;
-  color: $foreground-color;
-}
+@import "override";

@@ -1,0 +1,50 @@
+.snowhite-modules-weather, .snowhite-modules-forecast {
+  h1 {
+    font-size: 40pt;
+    font-family: $font-family;
+
+    &.temperature::after {
+      font-size: 20pt;
+    }
+  }
+  .temperature {
+    &::after {
+      vertical-align: super;
+    }
+
+    &.metric::after {
+      content: "C";
+    }
+
+    &.imperial::after {
+      content: "F";
+    }
+  }
+  h2 {
+    font-size: 18pt;
+    font-family: $font-family;
+    text-transform: lowercase;
+
+    &.temperature::after {
+      font-size: 14pt;
+    }
+  }
+  h3 {
+    font-size: 16pt;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-family: $font-family;
+  }
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  ul.forecasts {
+    li {
+      display: flex;
+      align-items: center;
+    }
+  }
+}

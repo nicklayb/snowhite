@@ -3,8 +3,8 @@ defmodule SnowhiteWeb.Home.Controller do
 
   plug(:put_view, SnowhiteWeb.Home.View)
 
-  def index(conn, _params) do
+  def index(conn, params) do
     conn
-    |> render("index.html")
+    |> render("index.html", params: params)
   end
 end

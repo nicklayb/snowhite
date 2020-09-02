@@ -15,5 +15,10 @@ mix-deps:
 nodejs-deps:
 	npm install --prefix $(ASSETS_FOLDER)
 
+.PHONY: secret
 secret:
 	mix phx.gen.secret 64
+
+.PHONY: test
+test:
+	mix test

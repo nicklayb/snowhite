@@ -3,7 +3,7 @@
     <div class="<%= pane_class(position) %>">
       <%= for {module, options} <- modules do %>
         <div class="module <%= module_class(module) %>">
-          <%= live_render(@conn, module, session: %{"options" => options}) %>
+          <%= live_render(@conn, module, session: %{"options" => options, "params" => @params}) %>
         </div>
       <% end %>
     </div>
