@@ -1,7 +1,22 @@
 defmodule Snowhite.Builder do
-  defmacro register_module(module, options \\ []) do
+  alias Snowhite.Helpers.Map, as: MapHelpers
+  alias Snowhite.Builder.Layout
+
+  defmacro register_module(position, module, options \\ []) do
+    if position not in Layout.positions(),
+      do:
+        raise(
+          "Wrong position `#{position}`; expected combo of [top|middle|bottom]_[left|middle|right]"
+        )
+
+    options = [{:_position, position} | options]
+
     quote do
-      @registered_modules [{unquote(module), unquote(options)} | @registered_modules]
+      @layout MapHelpers.append(
+                @layout,
+                unquote(position),
+                {unquote(module), unquote(options)}
+              )
     end
   end
 
@@ -9,13 +24,13 @@ defmodule Snowhite.Builder do
     quote do
       import Snowhite.Builder
       @before_compile {Snowhite.Builder, :__before_compile__}
-      @registered_modules []
+      @layout %Snowhite.Builder.Layout{}
     end
   end
 
   defmacro __before_compile__(_env) do
     quote do
-      def modules, do: @registered_modules
+      def layout, do: @layout
     end
   end
 end

@@ -51,7 +51,8 @@ config :snowhite, SnowhiteWeb.Endpoint,
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/snowhite_web/(live|views)/.*(ex)$",
-      ~r"lib/snowhite_web/templates/.*(eex)$"
+      ~r"lib/snowhite_web/templates/.*(eex)$",
+      ~r"lib/snowhite.ex"
     ]
   ]
 

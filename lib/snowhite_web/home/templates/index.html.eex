@@ -1,3 +1,11 @@
-<%= for {module, options} <- modules() do %>
-  <%= live_render(@conn, module, options: options) %>
-<% end %>
+<div class="layout">
+  <%= for {position, modules} <- layout() do %>
+    <div class="<%= pane_class(position) %>">
+      <%= for {module, options} <- modules do %>
+        <div class="module <%= module_class(module) %>">
+          <%= live_render(@conn, module, session: %{"options" => options}) %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

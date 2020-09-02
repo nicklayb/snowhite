@@ -1,0 +1,9 @@
+.layout {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 33% 34% 33%;
+  .pane {
+    padding: 20px;
+  }
+}
