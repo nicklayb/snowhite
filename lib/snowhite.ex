@@ -1,11 +1,12 @@
 defmodule Snowhite do
   use Snowhite.Builder
 
-  register_module(:top_left, Snowhite.Modules.Clock, timezone: "America/Toronto", locale: "fr")
-
   @city_id "6145489"
+  @timezone "America/Toronto"
   @locale "fr"
   @units :metric
+
+  register_module(:top_left, Snowhite.Modules.Clock, timezone: @timezone, locale: @locale)
 
   register_module(:top_right, Snowhite.Modules.Weather,
     city_id: @city_id,
