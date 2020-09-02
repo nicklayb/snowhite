@@ -1,4 +1,4 @@
-ASSETS_FOLDER=asserts
+ASSETS_FOLDER=assets
 
 .PHONY: dev
 dev:
