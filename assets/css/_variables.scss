@@ -1,8 +1,10 @@
 $black: #000 !default;
 $white: #FFF !default;
 
-$grid-layout-proportions: 33% 34% 33% !default;
-$font-family: 'Roboto Mono', monospace;
+$grid-layout-proportions: 40% 20% 40%;
+$font-family-mono: 'Roboto Mono', monospace;
+$font-family-sans: 'Roboto', sans-serif;
+$font-family-serif: 'Roboto Slab', serif;
 $background-color: $black !default;
 $foreground-color: $white !default;
 $module-inner-padding: 10px !default;

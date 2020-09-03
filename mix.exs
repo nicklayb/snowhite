@@ -45,7 +45,8 @@ defmodule Snowhite.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:timex, "~> 3.6.2"},
-      {:httpoison, "~> 1.7"}
+      {:httpoison, "~> 1.7"},
+      {:elixir_feed_parser, "~> 2.1.0"}
     ]
   end
 

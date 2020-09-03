@@ -29,6 +29,14 @@ defmodule Snowhite.Builder do
   defmacro __before_compile__(_env) do
     quote do
       def layout, do: @layout
+
+      def applications do
+        layout()
+        |> Layout.modules()
+        |> Enum.flat_map(fn {module, options} ->
+          module.applications(options)
+        end)
+      end
     end
   end
 end

@@ -1,7 +1,7 @@
 .snowhite-modules-weather, .snowhite-modules-forecast {
   h1 {
     font-size: 40pt;
-    font-family: $font-family;
+    font-family: $font-family-mono;
 
     &.temperature::after {
       font-size: 20pt;
@@ -22,7 +22,7 @@
   }
   h2 {
     font-size: 18pt;
-    font-family: $font-family;
+    font-family: $font-family-mono;
     text-transform: lowercase;
 
     &.temperature::after {
@@ -33,7 +33,7 @@
     font-size: 16pt;
     margin-left: 10px;
     margin-right: 10px;
-    font-family: $font-family;
+    font-family: $font-family-mono;
   }
   & > div {
     display: flex;

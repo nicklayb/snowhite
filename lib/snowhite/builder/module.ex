@@ -21,7 +21,8 @@ defmodule Snowhite.Builder.Module do
           |> mount()
 
         run_scheduled_events()
-        SnowhiteWeb.Endpoint.subscribe(@topic)
+
+        Phoenix.PubSub.subscribe(Snowhite.PubSub, @topic)
 
         socket
       end
@@ -36,7 +37,9 @@ defmodule Snowhite.Builder.Module do
 
       def config(key, fallback \\ nil), do: module_config(config_key(), key, fallback)
 
-      defoverridable(mount: 1)
+      def applications(_options), do: []
+
+      defoverridable(mount: 1, applications: 1)
     end
   end
 
@@ -105,5 +108,9 @@ defmodule Snowhite.Builder.Module do
     |> Application.get_env(:modules)
     |> Keyword.get(config_key, [])
     |> Keyword.get(value, fallback)
+  end
+
+  def broadcast(topic, event) do
+    Phoenix.PubSub.broadcast(Snowhite.PubSub, topic, event)
   end
 end
