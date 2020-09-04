@@ -2,6 +2,8 @@
 
 > Mirror mirror, tell me who is the most beautiful
 
+![Snowhite demo](demo.gif "Snowhite demo")
+
 ## Fetching deps
 
 You need to fetch both node and elixir deps before playing with it. You can use the `make deps` target to do so.
@@ -54,7 +56,6 @@ defmodule Snowhite.Modules.HelloWorld do
 end
 ```
 
-
 ### Other assigns
 
 If you need other assigns in your module, you must override `mount/1` to define those. That function recieves a socket with `options` and `params` assigned.
@@ -77,7 +78,24 @@ end
 
 ### Using options
 
-Suppose you register your module as the following:
+You must first defined supported options like the following
+
+```elixir
+defmodule Snowhite.Modules.HelloWorld do
+  use Snowhite.Builder.Module
+
+  def module_options do
+    %{
+      message: :required, # Raises if :message option is missing
+      color: {:optional, "white"} # Sets "white" if :color is missing
+    }
+  end
+
+  # ...
+end
+```
+
+You can then pass in options like below
 
 ```elixir
 defmoule Snowhite do
@@ -87,25 +105,61 @@ defmoule Snowhite do
 end
 ```
 
-You can access those options in the socket assigns under the `options` key.
+And access those options in the socket assigns under the `options` key.
 
 ```elixir
 defmodule Snowhite.Modules.HelloWorld do
   use Snowhite.Builder.Module
 
-  def render(%{options: %{message: message}} = assigns) do
+  def module_options do
+    %{
+      message: :required,
+      color: {:optional, "white"}
+    }
+  end
+
+  def render(%{options: %{color: color, message: message}} = assigns) do
     ~L"""
-      <h1>message</h1>
+      <h1 style="color: <%= color %>"><%= message %></h1>
     """
   end
 end
 ```
 
+#### Raises for bad options
+
+If you were to provide an unsupported option to a module, it would raise. This is an expected behaviour as it could help spotting typos or unintended option passing.
+
+```elixir
+defmodule Snowhite.Modules.HelloWorld do
+  use Snowhite.Builder.Module
+
+  def module_options do
+    %{
+      message: :required, # Raises if :message option is missing
+      color: {:optional, "white"} # Sets "white" if :color is missing
+    }
+  end
+
+  # ...
+end
+
+defmoule Snowhite do
+  use Snowhite.Builder
+
+  register_module(:top_left, Snowhite.Modules.HelloWorld, message: "Hello, punk.", locale: "fr")
+end
+```
+
+In this example, an exception would raise saying that `{:locale, "fr"}` is not supported as option.
+
 ### Convenient functions
 
 #### Periodically sending events
 
-Some modules might require some refresh/update at some point. To do so, you have access to the following helpers:
+The best way of working with periodic events is to add a Server that implements a GenServer to your module. Doing so will ensure that all instances of the app are sharing the exact same data and prevent visual failure as they will occur in the server. (See existing modules as inspiration)
+
+Howerver, some modules might require some refresh/update at some point. To do so, you have access to the following helpers:
 
 - `every(ms, name, func)`: Will run a function every `ms` milliseconds under the event `name`. **Note**: Every `name` must be unique as it refers to `handle_info/2` event name. If you want your module to have a configurable scheduled event, you can pass an atom instead of an integer for the `ms`. It will fetch the given option key from the assign instead of using an hardcoded timing
 
@@ -117,7 +171,6 @@ Some modules might require some refresh/update at some point. To do so, you have
 ~d(6h30m1s) # 23_401_000
 ```
 
-The `Snowhite.Modules.Clock` can be used as inspiration
 
 ### CSS
 

@@ -22,3 +22,13 @@ secret:
 .PHONY: test
 test:
 	mix test
+
+.PHONY: setup
+setup: deps copy-template
+
+.PHONY: setup
+setup: deps copy-template
+
+.PHONY: copy-template
+copy-template:
+	mix snowhite.copy_template

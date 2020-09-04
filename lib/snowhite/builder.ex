@@ -8,12 +8,18 @@ defmodule Snowhite.Builder do
           "Wrong position `#{position}`; expected combo of [top|middle|bottom]_[left|middle|right]"
         )
 
-    options = [{:_position, position} | options]
+    # options = ensure_options(module.module_options, options)
+    # options = [{:_position, position} | options]
 
-    module_def = {module, options}
+    # module_def = {module, options}
 
     quote do
-      @layout Layout.put_module(@layout, unquote(position), unquote(module_def))
+      @layout Layout.put_module(
+                @layout,
+                unquote(position),
+                {unquote(module),
+                 ensure_options(unquote(module).module_options, unquote(options))}
+              )
     end
   end
 
@@ -37,6 +43,29 @@ defmodule Snowhite.Builder do
           module.applications(options)
         end)
       end
+    end
+  end
+
+  def ensure_options(pattern, options) do
+    {valid_options, invalid_options} =
+      Enum.reduce(pattern, {[], options}, fn
+        {key, :required}, {valid_options, rest_options} ->
+          if not Keyword.has_key?(rest_options, key),
+            do: raise("Required option `:#{key}` not provided")
+
+          {value, rest_options} = Keyword.pop!(rest_options, key)
+
+          {[{key, value} | valid_options], rest_options}
+
+        {key, {:optional, fallback}}, {valid_options, rest_options} ->
+          {value, rest_options} = Keyword.pop(rest_options, key, fallback)
+
+          {[{key, value} | valid_options], rest_options}
+      end)
+
+    case invalid_options do
+      [option | _] -> raise "Unsupported option `#{inspect(option)}` provided"
+      _ -> valid_options
     end
   end
 end

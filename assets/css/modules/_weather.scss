@@ -1,4 +1,4 @@
-.snowhite-modules-weather, .snowhite-modules-forecast {
+.snowhite-modules-weather-current, .snowhite-modules-weather-forecast {
   h1 {
     font-size: 40pt;
     font-family: $font-family-mono;
@@ -24,6 +24,7 @@
     font-size: 18pt;
     font-family: $font-family-mono;
     text-transform: lowercase;
+    font-weight: bold;
 
     &.temperature::after {
       font-size: 14pt;
@@ -33,18 +34,17 @@
     font-size: 16pt;
     margin-left: 10px;
     margin-right: 10px;
-    font-family: $font-family-mono;
+    font-family: $font-family-sans;
   }
   & > div {
     display: flex;
     align-items: center;
     justify-content: flex-end;
   }
-
-  ul.forecasts {
-    li {
-      display: flex;
-      align-items: center;
+  table.forecasts {
+    td {
+      text-align: left;
+      vertical-align: middle;
     }
   }
 }

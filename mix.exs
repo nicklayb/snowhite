@@ -46,7 +46,8 @@ defmodule Snowhite.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:timex, "~> 3.6.2"},
       {:httpoison, "~> 1.7"},
-      {:elixir_feed_parser, "~> 2.1.0"}
+      {:elixir_feed_parser, "~> 2.1.0"},
+      {:sweet_xml, "~> 0.6.6"}
     ]
   end
 

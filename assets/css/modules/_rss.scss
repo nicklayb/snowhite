@@ -3,14 +3,23 @@
   ul.feeds > li {
     font-weight: bold;
     padding-left: 0.4em;
-    margin-bottom: 0.4em;
+    margin-bottom: 1.7em;
   }
   ul.news {
     margin-top: 0.5em;
     & > li {
       padding-left: 1em;
       font-weight: normal;
-      padding-bottom: 0.6em;
+      margin-bottom: 0.6em;
+      border-left: 2px solid white;
+      line-height: 1.4em;
+
+      a {
+        color: $white;
+        text-decoration: none;
+        display: block;
+        padding: 0.3em 0;
+      }
     }
   }
 }

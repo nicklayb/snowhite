@@ -1,0 +1,20 @@
+.snowhite-modules-calendar {
+  table {
+    td, th {
+      font-family: $font-family-mono;
+      padding: 0.5em;
+      text-align: center;
+
+      &.weekend, &.other-month {
+        color: darken($white, 30%);
+      }
+
+      &.today {
+        background-color: $white;
+        color: $black;
+        font-weight: bold;
+        border-radius: 1000px;
+      }
+    }
+  }
+}

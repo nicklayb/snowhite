@@ -1,16 +1,23 @@
 defmodule Snowhite.Modules.Clock do
   use Snowhite.Builder.Module
   import Snowhite.Builder.Module
+  alias __MODULE__
 
   @fallback_time_format "{h24}:{m}:{s}"
   @fallback_date_format "{WDfull} {D} {Mshort}"
   @fallback_locale "en"
-  @fallback_timezone "UTC"
   def mount(socket) do
     {:ok, set_current_date(socket)}
   end
 
-  every(~d(1s), :tick, &set_current_date/1)
+  def module_options do
+    %{
+      locale: {:optional, "en"},
+      timezone: {:optional, "UTC"},
+      time_format: {:optional, "{h24}:{m}:{s}"},
+      date_format: {:optional, "{WDfull} {D} {Mshort}"}
+    }
+  end
 
   def render(%{options: options} = assigns) do
     time_format = Keyword.get(options, :time_format, @fallback_time_format)
@@ -26,13 +33,17 @@ defmodule Snowhite.Modules.Clock do
     """
   end
 
-  defp set_current_date(socket) do
-    assign(socket, :current_date, now(socket.assigns))
+  def handle_info(:updated, socket) do
+    {:noreply, set_current_date(socket)}
   end
 
-  defp now(%{options: options}) do
-    options
-    |> Keyword.get(:timezone, @fallback_timezone)
-    |> Timex.now()
+  defp set_current_date(socket) do
+    assign(socket, :current_date, Clock.Server.now())
+  end
+
+  def applications(options) do
+    [
+      {Clock.Server, options}
+    ]
   end
 end

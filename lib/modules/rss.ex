@@ -6,13 +6,15 @@ defmodule Snowhite.Modules.Rss do
   every(~d(25s), :scroll, &scroll/1)
 
   def mount(socket) do
-    socket =
-      socket
-      |> assign(:news, [])
-
-    Rss.Server.update()
+    socket = update(socket)
 
     {:ok, socket}
+  end
+
+  def module_options do
+    %{
+      feeds: :required
+    }
   end
 
   def render(assigns) do
@@ -23,7 +25,7 @@ defmodule Snowhite.Modules.Rss do
             <%= name %>
             <ul class="news">
               <%= for item <- Enum.take(news, 3) do %>
-                <li><%= item.title %></li>
+                <li><a href="<%= item.id %>"><%= item.title %></a></li>
               <% end %>
             </ul>
           </li>
@@ -46,9 +48,13 @@ defmodule Snowhite.Modules.Rss do
   end
 
   def handle_info(:updated, socket) do
+    {:noreply, update(socket)}
+  end
+
+  defp update(socket) do
     news = Rss.Server.news()
 
-    {:noreply, assign(socket, :news, news)}
+    assign(socket, :news, news)
   end
 
   def applications(options) do

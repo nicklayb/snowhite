@@ -7,7 +7,7 @@ defmodule Snowhite.ModuleSupervisor do
 
   @impl true
   def init(_) do
-    children = Snowhite.applications()
+    children = Enum.dedup_by(Snowhite.applications(), fn {mod, _} -> mod end)
 
     Supervisor.init(children, strategy: :one_for_one)
   end

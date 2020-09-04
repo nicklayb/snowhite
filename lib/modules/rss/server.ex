@@ -4,7 +4,7 @@ defmodule Snowhite.Modules.Rss.Server do
   require Logger
   alias Snowhite.Modules.Rss.Poller
 
-  @auto_sync_timer ~d(1m)
+  @auto_sync_timer ~d(15m)
 
   def start_link(args) do
     GenServer.start_link(__MODULE__, args, name: __MODULE__)
@@ -22,8 +22,8 @@ defmodule Snowhite.Modules.Rss.Server do
     feeds = Keyword.fetch!(options, :feeds)
     Logger.info("[#{__MODULE__}] Started with #{length(feeds)} feeds")
     update()
-    Process.send_after(self(), :auto_sync, @auto_sync_timer)
-    {:ok, %{feeds: feeds, news: []}}
+    update_later(options)
+    {:ok, %{options: options, feeds: feeds, news: []}}
   end
 
   def handle_cast(:update, state) do
@@ -35,14 +35,20 @@ defmodule Snowhite.Modules.Rss.Server do
     {:reply, news, state}
   end
 
-  def handle_info(:auto_sync, state) do
+  def handle_info(:auto_sync, %{options: options} = state) do
+    state = update(state)
+    update_later(options)
     send(self(), :notify)
-    {:noreply, update(state)}
+    {:noreply, state}
   end
 
   def handle_info(:notify, state) do
     Phoenix.PubSub.broadcast!(Snowhite.PubSub, "snowhite:modules:rss", :updated)
     {:noreply, state}
+  end
+
+  defp update_later(options) do
+    Process.send_after(self(), :auto_sync, Keyword.get(options, :refresh, @auto_sync_timer))
   end
 
   defp update(%{feeds: feeds} = state) do

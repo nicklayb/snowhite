@@ -4,15 +4,21 @@ defmodule Snowhite.Builder.Module do
 
   defmacro __using__(options) do
     config_key = Keyword.get(options, :config_key, nil)
+    topic = Keyword.get(options, :topic, nil)
 
     quote do
       use Phoenix.LiveView
       import Snowhite.Builder.Module
       import Snowhite.Helpers.Timing
+      import Snowhite.Helpers.Html
       @scheduled []
       @before_compile {Snowhite.Builder.Module, :__before_compile__}
 
-      @topic Casing.topic(__MODULE__)
+      if is_nil(unquote(topic)) do
+        @topic Casing.topic(__MODULE__)
+      else
+        @topic unquote(topic)
+      end
 
       def mount(_, session, socket) do
         socket =
@@ -39,7 +45,9 @@ defmodule Snowhite.Builder.Module do
 
       def applications(_options), do: []
 
-      defoverridable(mount: 1, applications: 1)
+      def module_options, do: []
+
+      defoverridable(mount: 1, applications: 1, module_options: 0)
     end
   end
 
