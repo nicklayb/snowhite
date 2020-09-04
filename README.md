@@ -16,6 +16,10 @@ Example to override `PORT`, you add `export SNOWHITE_PORT=1234` in `~/.envrc` an
 
 Start the dev server using either `iex -S mix phx.server` or `make dev`
 
+## Initial setup
+
+Copy the file `snowhite_template.ex` to `snowhite.ex`.
+
 ## Registering modules
 
 You can register any module in the `showhite.ex` file using the `register_module/3` macro.
