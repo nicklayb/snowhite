@@ -3,9 +3,6 @@ defmodule Snowhite.Modules.Clock do
   import Snowhite.Builder.Module
   alias __MODULE__
 
-  @fallback_time_format "{h24}:{m}:{s}"
-  @fallback_date_format "{WDfull} {D} {Mshort}"
-  @fallback_locale "en"
   def mount(socket) do
     {:ok, set_current_date(socket)}
   end
@@ -19,11 +16,11 @@ defmodule Snowhite.Modules.Clock do
     }
   end
 
-  def render(%{options: options} = assigns) do
-    time_format = Keyword.get(options, :time_format, @fallback_time_format)
-    date_format = Keyword.get(options, :date_format, @fallback_date_format)
+  def render(assigns) do
+    time_format = get_option(assigns, :time_format)
+    date_format = get_option(assigns, :date_format)
 
-    locale = Keyword.get(options, :locale, @fallback_locale)
+    locale = get_option(assigns, :locale)
 
     ~L"""
       <div>

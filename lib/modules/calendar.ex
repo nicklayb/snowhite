@@ -4,8 +4,6 @@ defmodule Snowhite.Modules.Calendar do
   alias Snowhite.Modules.Clock
   alias Snowhite.Modules.CalendarBuilder
 
-  @fallback_locale "en"
-
   def mount(socket) do
     {:ok, set_current_date(socket)}
   end
@@ -35,7 +33,7 @@ defmodule Snowhite.Modules.Calendar do
             <tr>
               <%= for weekday <- weekdays do %>
                 <th>
-                  <%= day_letter(weekday, @options) %>
+                  <%= day_letter(weekday, assigns) %>
                 </th>
               <% end %>
             </tr>
@@ -67,9 +65,9 @@ defmodule Snowhite.Modules.Calendar do
     )
   end
 
-  defp day_letter(date, options) do
+  defp day_letter(date, assigns) do
     date
-    |> Timex.lformat!("{WDshort}", Keyword.get(options, :locale, @fallback_locale))
+    |> Timex.lformat!("{WDshort}", get_option(assigns, :locale))
     |> String.at(0)
     |> String.upcase()
   end

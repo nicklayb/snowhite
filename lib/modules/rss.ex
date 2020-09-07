@@ -13,18 +13,21 @@ defmodule Snowhite.Modules.Rss do
 
   def module_options do
     %{
-      feeds: :required
+      feeds: :required,
+      visible_news: {:optional, 3}
     }
   end
 
   def render(assigns) do
+    take = get_option(assigns, :visible_news)
+
     ~L"""
       <ul class="feeds">
         <%= for {name, news} <- @news do %>
           <li>
             <%= name %>
             <ul class="news">
-              <%= for item <- Enum.take(news, 3) do %>
+              <%= for item <- Enum.take(news, take) do %>
                 <li><a href="<%= item.id %>"><%= item.title %></a></li>
               <% end %>
             </ul>

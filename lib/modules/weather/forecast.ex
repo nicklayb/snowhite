@@ -2,8 +2,6 @@ defmodule Snowhite.Modules.Weather.Forecast do
   use Snowhite.Builder.Module, config_key: :weather
   alias OpenWeather.Weather.WeatherItem
   alias Snowhite.Modules.Weather
-  @fallback_locale "fr"
-  @fallback_units :metric
 
   def mount(socket) do
     socket = update(socket)
@@ -12,8 +10,8 @@ defmodule Snowhite.Modules.Weather.Forecast do
   end
 
   def render(assigns) do
-    units = get_option(assigns, :units, @fallback_units)
-    locale = get_option(assigns, :locale, @fallback_locale)
+    units = get_option(assigns, :units)
+    locale = get_option(assigns, :locale)
 
     ~L"""
       <table class="forecasts">
