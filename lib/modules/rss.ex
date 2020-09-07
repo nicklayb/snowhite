@@ -38,14 +38,7 @@ defmodule Snowhite.Modules.Rss do
   end
 
   def scroll(%{assigns: %{news: news}} = socket) do
-    news =
-      Enum.map(news, fn
-        {name, [head | tail]} ->
-          {name, tail ++ [head]}
-
-        {name, []} ->
-          {name, []}
-      end)
+    news = Enum.map(news, fn {name, list} -> {name, ListHelpers.cycle(list)} end)
 
     assign(socket, :news, news)
   end

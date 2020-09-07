@@ -11,6 +11,7 @@ defmodule Snowhite.Builder.Module do
       import Snowhite.Builder.Module
       import Snowhite.Helpers.Timing
       import Snowhite.Helpers.Html
+      alias Snowhite.Helpers.List, as: ListHelpers
       @scheduled []
       @before_compile {Snowhite.Builder.Module, :__before_compile__}
 

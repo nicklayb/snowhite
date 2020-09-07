@@ -19,7 +19,7 @@ defmodule Snowhite.Modules.Weather.Forecast do
         <%= for %{dt: dt, main: main, weather: [weather | _]} <- @forecasts do %>
           <tr>
             <td><img src="<%= WeatherItem.icon_url(weather, "") %>"></td>
-            <td><h2 class="temperature <%= units %>"><%= round(main.temp) %></h1></td>
+            <td><h2 class="temperature <%= units %>"><%= round(main.temp) %></h2></td>
             <td><h3><%= day_name(dt, locale) %></h3></td>
           </tr>
         <% end %>
