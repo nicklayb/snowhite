@@ -1,4 +1,4 @@
-use Mix.Config
+use Config
 
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
@@ -17,7 +17,7 @@ level =
   |> System.get_env("info")
   |> String.to_atom()
 
-config :snowhite, SnowhiteWeb.Endpoint,
+config :snowhite, SnowhiteDemo.Endpoint,
   url: [host: host, port: port],
   cache_static_manifest: "priv/static/cache_manifest.json"
 

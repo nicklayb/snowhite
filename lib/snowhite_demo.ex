@@ -1,9 +1,11 @@
-defmodule SnowhiteWeb do
-  def controller do
+defmodule SnowhiteDemo do
+  def router do
     quote do
-      use Phoenix.Controller, namespace: SnowhiteWeb
+      use Phoenix.Router
 
       import Plug.Conn
+      import Phoenix.Controller
+      import Phoenix.LiveView.Router
     end
   end
 
@@ -12,9 +14,9 @@ defmodule SnowhiteWeb do
 
     quote do
       use Phoenix.View,
-        root: "lib/snowhite_web",
+        root: "lib/snowhite_demo",
         path: unquote(path),
-        namespace: SnowhiteWeb
+        namespace: SnowhiteDemo
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
@@ -25,26 +27,23 @@ defmodule SnowhiteWeb do
     end
   end
 
-  def live_view do
-    quote do
-      use Phoenix.LiveView,
-        layout: {SnowhiteWeb.Layouts.View, "live.html"}
-
-      unquote(view_helpers())
-    end
-  end
-
   defp view_helpers do
     quote do
+      # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
+
+      # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers
+
+      # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
+
+      import SnowhiteDemo.ErrorHelpers
+      import SnowhiteDemo.Gettext
+      alias SnowhiteDemo.Router.Helpers, as: Routes
     end
   end
 
-  @doc """
-  When used, dispatch to the appropriate controller/view/etc.
-  """
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
   end

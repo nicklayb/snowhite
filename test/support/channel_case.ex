@@ -24,7 +24,7 @@ defmodule SnowhiteWeb.ChannelCase do
       import SnowhiteWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint SnowhiteWeb.Endpoint
+      @endpoint SnowhiteDemo.Endpoint
     end
   end
 

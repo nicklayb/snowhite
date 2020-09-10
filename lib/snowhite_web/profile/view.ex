@@ -1,8 +1,8 @@
-defmodule SnowhiteWeb.Home.View do
-  use SnowhiteWeb, {:view, path: "home/templates"}
+defmodule SnowhiteWeb.Profile.View do
+  use SnowhiteWeb, {:view, path: "profile/templates"}
 
-  def layout do
-    layout = Snowhite.layout()
+  def layout(profile) do
+    layout = profile.layout()
 
     Snowhite.Builder.Layout.positions()
     |> Enum.map(&{&1, Map.get(layout, &1, [])})

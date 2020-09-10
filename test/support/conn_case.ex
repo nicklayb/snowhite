@@ -27,7 +27,7 @@ defmodule SnowhiteWeb.ConnCase do
       alias SnowhiteWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
-      @endpoint SnowhiteWeb.Endpoint
+      @endpoint SnowhiteDemo.Endpoint
     end
   end
 

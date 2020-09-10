@@ -1,4 +1,4 @@
-use Mix.Config
+use Config
 
 config :snowhite, :modules,
   weather: [

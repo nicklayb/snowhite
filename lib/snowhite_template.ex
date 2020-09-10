@@ -1,5 +1,5 @@
 defmodule Snowhite.Template do
-  use Snowhite.Builder
+  use Snowhite.Builder.Profile
 
   @city_id "6167865"
   @timezone "America/Toronto"

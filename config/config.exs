@@ -5,14 +5,14 @@
 # is restricted to this project.
 
 # General application configuration
-use Mix.Config
+use Config
 
 # Configures the endpoint
-config :snowhite, SnowhiteWeb.Endpoint,
+config :snowhite, SnowhiteDemo.Endpoint,
   http: [port: System.get_env("PORT")],
   url: [host: "localhost"],
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
-  render_errors: [view: SnowhiteWeb.ErrorView, accepts: ~w(html json), layout: false],
+  render_errors: [view: SnowhiteDemo.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Snowhite.PubSub,
   live_view: [signing_salt: System.get_env("LIVE_VIEW_SALT")]
 
@@ -24,7 +24,7 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :snowhite, SnowhiteWeb.Gettext, default_locale: System.get_env("LOCALE", "en")
+config :snowhite, SnowhiteDemo.Gettext, default_locale: System.get_env("LOCALE", "en")
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

@@ -1,5 +1,5 @@
-defmodule SnowhiteWeb.Errors.View do
-  use SnowhiteWeb, {:view, path: "errors/templates"}
+defmodule SnowhiteDemo.Errors.View do
+  use SnowhiteDemo, {:view, path: "errors/templates"}
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

@@ -1,8 +1,8 @@
-use Mix.Config
+use Config
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :snowhite, SnowhiteWeb.Endpoint,
+config :snowhite, SnowhiteDemo.Endpoint,
   http: [port: 4002],
   server: false
 

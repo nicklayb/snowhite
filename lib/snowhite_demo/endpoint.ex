@@ -1,4 +1,4 @@
-defmodule SnowhiteWeb.Endpoint do
+defmodule SnowhiteDemo.Endpoint do
   use Phoenix.Endpoint, otp_app: :snowhite
 
   # The session will be stored in the cookie and signed,
@@ -6,13 +6,9 @@ defmodule SnowhiteWeb.Endpoint do
   # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
-    key: "_snowhite_key",
+    key: "_snowhite_demo_key",
     signing_salt: "bJ7Yf3Do"
   ]
-
-  socket "/socket", SnowhiteWeb.UserSocket,
-    websocket: true,
-    longpoll: false
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
@@ -39,7 +35,6 @@ defmodule SnowhiteWeb.Endpoint do
     cookie_key: "request_logger"
 
   plug Plug.RequestId
-  plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
@@ -49,5 +44,5 @@ defmodule SnowhiteWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug SnowhiteWeb.Router
+  plug SnowhiteDemo.Router
 end

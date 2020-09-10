@@ -1,4 +1,4 @@
-defmodule Snowhite.Application do
+defmodule SnowhiteDemo.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -7,10 +7,9 @@ defmodule Snowhite.Application do
 
   def start(_type, _args) do
     children = [
-      SnowhiteWeb.Telemetry,
       {Phoenix.PubSub, name: Snowhite.PubSub},
-      SnowhiteWeb.Endpoint,
-      Snowhite.ModuleSupervisor
+      SnowhiteDemo.Endpoint,
+      SnowhiteApp.ApplicationSupervisor
     ]
 
     opts = [strategy: :one_for_one, name: Snowhite.Supervisor]
@@ -18,7 +17,7 @@ defmodule Snowhite.Application do
   end
 
   def config_change(changed, _new, removed) do
-    SnowhiteWeb.Endpoint.config_change(changed, removed)
+    SnowhiteDemo.Endpoint.config_change(changed, removed)
     :ok
   end
 end

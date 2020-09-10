@@ -1,4 +1,4 @@
-use Mix.Config
+use Config
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -6,7 +6,7 @@ use Mix.Config
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :snowhite, SnowhiteWeb.Endpoint,
+config :snowhite, SnowhiteDemo.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
@@ -45,7 +45,7 @@ config :snowhite, SnowhiteWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :snowhite, SnowhiteWeb.Endpoint,
+config :snowhite, SnowhiteDemo.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
