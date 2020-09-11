@@ -7,7 +7,12 @@ defmodule Snowhite.Modules.Weather.Current do
   @fallback_units :metric
 
   def mount(socket) do
-    socket = update(socket)
+    socket =
+      socket
+      |> assign(:temperature, 0)
+      |> assign(:icon_url, "")
+      |> assign(:name, "")
+      |> update()
 
     {:ok, socket}
   end
