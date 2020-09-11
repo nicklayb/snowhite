@@ -26,6 +26,7 @@ defmodule Snowhite.MixProject do
       links: %{
         "GitHub" => @github
       },
+      files: ["lib", "config", "priv"],
       maintainers: ["Nicolas Boisvert"]
     ]
   end
@@ -53,7 +54,8 @@ defmodule Snowhite.MixProject do
       {:elixir_feed_parser, "~> 2.1.0"},
       {:sweet_xml, "~> 0.6.6"},
       {:eqrcode, "~> 0.1.7"},
-      {:bitly, "~> 0.1"}
+      {:bitly, "~> 0.1"},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
 

@@ -239,4 +239,7 @@ Start the dev server using `make dev`
 
 ## TODO
 
+- [] Write tests
+- [] Improve documentations
+- [] Write guides
 - [] Support multiple application names so we can have two clock with different city, for instance.
