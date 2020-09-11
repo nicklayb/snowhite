@@ -2,7 +2,7 @@ ASSETS_FOLDER=assets
 
 .PHONY: dev
 dev:
-	iex -S mix phx.server
+	iex -S mix run dev.exs
 
 .PHONY: deps
 deps: mix-deps nodejs-deps
@@ -22,13 +22,3 @@ secret:
 .PHONY: test
 test:
 	mix test
-
-.PHONY: setup
-setup: deps copy-template
-
-.PHONY: setup
-setup: deps copy-template
-
-.PHONY: copy-template
-copy-template:
-	mix snowhite.copy_template

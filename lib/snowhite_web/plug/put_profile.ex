@@ -5,7 +5,6 @@ defmodule SnowhiteWeb.Plug.PutProfile do
   def init(opts) do
     profiles = Keyword.fetch!(opts, :profiles)
 
-    IO.inspect(profiles)
     %{
       profiles: profiles
     }
@@ -33,7 +32,6 @@ defmodule SnowhiteWeb.Plug.PutProfile do
 
   defp profile_exists?(lookup_profile, profiles) do
     Enum.any?(profiles, fn {profile, _} ->
-      IO.inspect({profile, profiles})
       to_string(profile) == lookup_profile
     end)
   end
@@ -48,8 +46,11 @@ defmodule SnowhiteWeb.Plug.PutProfile do
     end
   end
 
-  defp get_profile_from_params(%Plug.Conn{query_params: %Plug.Conn.Unfetched{}} = conn),
-    do: fetch_query_params(conn)
+  defp get_profile_from_params(%Plug.Conn{query_params: %Plug.Conn.Unfetched{}} = conn) do
+    conn
+    |> fetch_query_params()
+    |> get_profile_from_params()
+  end
 
   defp get_profile_from_params(%Plug.Conn{query_params: %{@profile_param => profile}}),
     do: profile

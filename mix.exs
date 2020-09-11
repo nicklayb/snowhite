@@ -19,8 +19,7 @@ defmodule Snowhite.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {SnowhiteDemo.Application, []},
-      extra_applications: [:logger, :runtime_tools, :os_mon]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -38,10 +37,8 @@ defmodule Snowhite.MixProject do
       {:floki, ">= 0.0.0", only: :test},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_dashboard, "~> 0.2"},
-      {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
+      {:plug_cowboy, "~> 2.0", only: :dev},
       {:timex, "~> 3.6.2"},
       {:httpoison, "~> 1.7"},
       {:elixir_feed_parser, "~> 2.1.0"},

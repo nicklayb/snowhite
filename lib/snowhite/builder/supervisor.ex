@@ -12,7 +12,9 @@ defmodule Snowhite.Builder.Supervisor do
 
         @impl true
         def init(_) do
-          Supervisor.init(profile_applications(), strategy: :one_for_one)
+          children = profile_applications()
+          pub_sub = {Phoenix.PubSub, name: Snowhite.PubSub}
+          Supervisor.init([pub_sub | children], strategy: :one_for_one)
         end
 
         def profile_applications do
