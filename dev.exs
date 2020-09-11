@@ -59,7 +59,8 @@ defmodule Snowhite.Profiles.Default do
   register_module(:top_left, Snowhite.Modules.Rss,
     feeds: [
       {"Hacker News", "https://hnrss.org/newest"}
-    ]
+    ],
+    persist_app: :snowhite
   )
 end
 
@@ -114,6 +115,8 @@ defmodule SnowhiteDemo.Endpoint do
 end
 
 Application.put_env(:phoenix, :serve_endpoints, true)
+Application.put_env(:phoenix, :json_library, Jason)
+Application.put_env(:bitly, :access_token, System.get_env("BITLY_TOKEN"))
 
 Task.start(fn ->
   children = [

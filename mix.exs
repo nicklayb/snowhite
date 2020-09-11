@@ -42,7 +42,9 @@ defmodule Snowhite.MixProject do
       {:timex, "~> 3.6.2"},
       {:httpoison, "~> 1.7"},
       {:elixir_feed_parser, "~> 2.1.0"},
-      {:sweet_xml, "~> 0.6.6"}
+      {:sweet_xml, "~> 0.6.6"},
+      {:eqrcode, "~> 0.1.7"},
+      {:bitly, "~> 0.1"}
     ]
   end
 
