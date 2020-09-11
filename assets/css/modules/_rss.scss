@@ -1,3 +1,4 @@
+$rss-svg-size: 60px;
 .snowhite-modules-rss {
   font-family: $font-family-sans;
   ul.feeds > li {
@@ -13,12 +14,26 @@
       margin-bottom: 0.6em;
       border-left: 2px solid white;
       line-height: 1.4em;
+      display: flex;
+      align-items: center;
 
       a {
         color: $white;
         text-decoration: none;
         display: block;
         padding: 0.3em 0;
+      }
+
+      svg {
+        min-width: $rss-svg-size;
+        min-height: $rss-svg-size;
+        max-width: $rss-svg-size;
+        max-height: $rss-svg-size;
+        margin-right: 1em;
+      }
+
+      small {
+        color: darken($white, 30%);
       }
     }
   }

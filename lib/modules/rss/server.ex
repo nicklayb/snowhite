@@ -3,6 +3,7 @@ defmodule Snowhite.Modules.Rss.Server do
   import Snowhite.Helpers.Timing
   require Logger
   alias Snowhite.Modules.Rss.Poller
+  alias Snowhite.Modules.Rss.UrlShortener
 
   @auto_sync_timer ~d(15m)
 
@@ -55,8 +56,31 @@ defmodule Snowhite.Modules.Rss.Server do
     news =
       feeds
       |> Poller.poll()
-      |> Enum.map(fn {name, rss} -> {name, rss.entries} end)
+      |> Enum.map(fn {name, rss} ->
+        entries = put_short_url(state, rss.entries)
+
+        {name, entries}
+      end)
 
     %{state | news: news}
+  end
+
+  defp put_short_url(%{options: options}, entries) do
+    if Keyword.get(options, :qr_codes, true) do
+      Enum.map(entries, fn entry ->
+        short =
+          entry
+          |> get_entry_url()
+          |> UrlShortener.shorten()
+
+        Map.put(entry, :short_link, short)
+      end)
+    else
+      entries
+    end
+  end
+
+  defp get_entry_url(entry) do
+    Map.get(entry, :"rss2:link", nil)
   end
 end

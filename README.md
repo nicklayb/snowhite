@@ -8,25 +8,39 @@
 
 You need to fetch both node and elixir deps before playing with it. You can use the `make deps` target to do so.
 
-## Start dev server
-
-We use `direnv` to setup environment. So create or edit `~/.envrc` to add env variable if you need to prefixed with `SNOWHITE_`.
-
-Example to override `PORT`, you add `export SNOWHITE_PORT=1234` in `~/.envrc` and you server will be exposed under `1234`. (**Note**: Any change require server restart)
-
-Start the dev server using either `iex -S mix phx.server` or `make dev`
-
 ## Initial setup
 
-Copy the file `snowhite_template.ex` to `snowhite.ex`.
+### Creating the project
+Create a new phoenix project
 
-## Registering modules
+```bash
+mix phx.new my_mirror --no-ecto
+```
 
-You can register any module in the `showhite.ex` file using the `register_module/3` macro.
+*If you want to use Ecto, you can, but Snowhite doesn't require it.*
+
+### Creating the profiles
+
+Snowhite makes use of different profile to better split information. You can create multiple profile with multiple modules for different use cases. You first need to create the profile manager like the following. You **must** at least include a `:default` profile.
+
 
 ```elixir
-defmoule Snowhite do
-  use Snowhite.Builder
+defmodule MyMirror.Profiles do
+  use Snowhite
+
+  profile(:default, MyMirror.Profiles.Default)
+end
+```
+
+You can create as much profile as you want as long as their name differs. You can switch between profile using either a param `?profile=another` or a `X-Snowhite-Profile: another` header. It would then load the `:another` profile instead of `:default`
+
+#### Creating a profile and registering modules
+
+You can register any module in the Profile module using the `register_module/3` macro.
+
+```elixir
+defmodule MyMirror.Profiles.Default do
+  use Snowhite.Builder.Profile
 
   register_module(:top_left, Snowhite.Modules.Clock, locale: "fr")
 end
@@ -37,6 +51,40 @@ It expects:
 - A module using either a `Snowhite.Builder.Module` or `Phoenix.LiveView`; Some examples modules are available in `lib/modules` [see here for custom modules](#creating-modules).
 - A keyword list of options specific to module.
 
+### Route the profiles
+
+In your Phoenix's router, add the following call
+
+```elixir
+defmodule SnowhiteNboisvertWeb.Router do
+  #...
+  import Snowhite, only: [snowhite_router: 1]
+
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+  end
+
+  pipe_through :browser # Make sure you piped through the browser pipeline
+
+  snowhite_router(SnowhiteNboisvert.Profiles)
+end
+```
+
+Snowhite renders on `/`, so if you want to scope it under `/mirror`, for instance, you can do the following
+
+```elixir
+scope "/mirror" do
+  snowhite_router(SnowhiteNboisvert.Profiles)
+end
+```
+
+### Assets
+
+Snowhite requires at least a js file located at `../deps/snowhite/assets/js/live.js`. Even though it does **not** require a CSS file, you might want to import the one provided with Snowhite to have basic styling at `../deps/snowhite/assets/css/app.scss`.
 
 ## Creating modules
 
@@ -102,8 +150,8 @@ end
 You can then pass in options like below
 
 ```elixir
-defmoule Snowhite do
-  use Snowhite.Builder
+defmodule MyMirror.Profiles.Default do
+  use Snowhite.Builder.Profile
 
   register_module(:top_left, Snowhite.Modules.HelloWorld, message: "Hello, punk.")
 end
@@ -148,8 +196,8 @@ defmodule Snowhite.Modules.HelloWorld do
   # ...
 end
 
-defmoule Snowhite do
-  use Snowhite.Builder
+defmodule MyMirror.Profiles.Default do
+  use Snowhite.Builder.Profile
 
   register_module(:top_left, Snowhite.Modules.HelloWorld, message: "Hello, punk.", locale: "fr")
 end
@@ -175,9 +223,20 @@ Howerver, some modules might require some refresh/update at some point. To do so
 ~d(6h30m1s) # 23_401_000
 ```
 
-
 ### CSS
 
 You might need some css to make this beautiful. To do so, create a file under `assets/css/modules/my_module.scss` and register it in `assets/css/modules/_modules.scss`. Now all you need is to fulfill the file.
 
 The module is scoped under a div that has the module name as class. If your module is named `Snowhite.Modules.SomeNice.Module`, the class will be `snowhite-modules-somenice-module`. It is recommended that you scope all your styling under this. If you want to override anything else (colors, layout etc...), edit it inside over `_override.scss`.
+
+## Start dev server
+
+We use `direnv` to setup environment. So create or edit `~/.envrc` to add env variable if you need to prefixed with `SNOWHITE_`.
+
+Example to override `PORT`, you add `export SNOWHITE_PORT=1234` in `~/.envrc` and you server will be exposed under `1234`. (**Note**: Any change require server restart)
+
+Start the dev server using `make dev`
+
+## TODO
+
+- [] Support multiple application names so we can have two clock with different city, for instance.
