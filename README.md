@@ -240,6 +240,7 @@ Start the dev server using `make dev`
 ## TODO
 
 - [] Write tests
+- [] Extract OpenWeather client to it's own package
 - [] Improve documentations
 - [] Write guides
 - [] Support multiple application names so we can have two clock with different city, for instance.

@@ -26,7 +26,7 @@ defmodule Snowhite.MixProject do
       links: %{
         "GitHub" => @github
       },
-      files: ["lib", "config", "priv"],
+      files: ["assets/css", "lib", "config", "priv", "mix.exs", "mix.lock"],
       maintainers: ["Nicolas Boisvert"]
     ]
   end
