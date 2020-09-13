@@ -8,10 +8,10 @@ defmodule Snowhite.Helpers.Module do
   Snowhite.Helpers
   ```
   """
-  @spec parent_module(module()) :: module()
-  defmacro parent_module(module) do
-    quote do
-      unquote(module)
+  @spec parent_module(module()) :: module() | nil
+  def parent_module(module) do
+    if String.contains?(inspect(module), ".") do
+      module
       |> to_string()
       |> String.split(".")
       |> Enum.reverse()
@@ -19,6 +19,8 @@ defmodule Snowhite.Helpers.Module do
       |> Enum.reverse()
       |> Enum.join(".")
       |> String.to_existing_atom()
+    else
+      nil
     end
   end
 end
