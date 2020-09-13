@@ -1,7 +1,6 @@
 defmodule Snowhite.Helpers.List do
   @doc """
   Same as `cycle/2` excepts that is uses 1 as the count value
-  ```
   """
   @spec cycle(list()) :: list()
   def cycle(list), do: cycle(list, 1)
