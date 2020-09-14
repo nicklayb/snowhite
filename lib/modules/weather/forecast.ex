@@ -1,5 +1,5 @@
 defmodule Snowhite.Modules.Weather.Forecast do
-  use Snowhite.Builder.Module, config_key: :weather
+  use Snowhite.Builder.Module, config_key: :weather, topic: "snowhite:modules:weather"
   alias OpenWeather.Weather.WeatherItem
   alias Snowhite.Modules.Weather
 
