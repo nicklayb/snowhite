@@ -2,7 +2,9 @@ defmodule Snowhite.Builder.Controller do
   defmacro build do
     quote do
       defmodule Controller do
-        use SnowhiteWeb, :controller
+        use Phoenix.Controller, namespace: SnowhiteWeb
+
+        import Plug.Conn
         require Snowhite.Helpers.Module
         alias SnowhiteWeb.Plug.PutProfile
         @parent_module Snowhite.Helpers.Module.parent_module(__MODULE__)

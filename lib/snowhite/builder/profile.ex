@@ -8,11 +8,6 @@ defmodule Snowhite.Builder.Profile do
           "Wrong position `#{position}`; expected combo of [top|middle|bottom]_[left|middle|right]"
         )
 
-    # options = ensure_options(module.module_options, options)
-    # options = [{:_position, position} | options]
-
-    # module_def = {module, options}
-
     quote do
       @layout Layout.put_module(
                 @layout,

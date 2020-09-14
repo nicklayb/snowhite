@@ -1,12 +1,4 @@
 defmodule SnowhiteWeb do
-  def controller do
-    quote do
-      use Phoenix.Controller, namespace: SnowhiteWeb
-
-      import Plug.Conn
-    end
-  end
-
   def view(options \\ []) do
     path = Keyword.fetch!(options, :path)
 

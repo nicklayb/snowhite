@@ -1,8 +1,8 @@
 <div class="layout">
-  <%= for {position, modules} <- layout(@profile) do %>
+  <%= for {position, modules} <- layout(@profile.layout()) do %>
     <div class="<%= pane_class(position) %>">
       <%= for {module, options} <- modules do %>
-        <div class="module <%= module_class(module) %>">
+        <div class="module <%= Casing.class(module) %>">
           <%= live_render(@conn, module, session: %{"options" => options, "params" => @params}) %>
         </div>
       <% end %>

@@ -1,4 +1,43 @@
 defmodule SnowhiteWeb.ConnCase do
+  defmodule Router do
+    use Phoenix.Router
+
+    pipeline :browser do
+      plug(:accepts, ["html"])
+      plug(:fetch_session)
+      plug(:protect_from_forgery)
+      plug(:put_secure_browser_headers)
+    end
+
+    pipeline :api do
+      plug(:accepts, ["json"])
+    end
+
+    pipe_through(:browser)
+  end
+
+  defmodule Endpoint do
+    use Phoenix.Endpoint, otp_app: :snowhite
+
+    socket "/live", Phoenix.LiveView.Socket
+
+    plug Phoenix.CodeReloader
+
+    plug Plug.Static,
+      at: "/",
+      from: :snowhite,
+      gzip: false,
+      only: ~w(css js)
+
+    plug Plug.Session,
+      store: :cookie,
+      key: "_live_view_key",
+      signing_salt: "bJ7Yf3Do"
+
+    plug Plug.RequestId
+    plug Router
+  end
+
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -24,14 +63,14 @@ defmodule SnowhiteWeb.ConnCase do
       import Phoenix.ConnTest
       import SnowhiteWeb.ConnCase
 
-      alias SnowhiteWeb.Router.Helpers, as: Routes
-
       # The default endpoint for testing
-      @endpoint SnowhiteDemo.Endpoint
+      @endpoint Endpoint
     end
   end
 
   setup _tags do
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    conn = Phoenix.ConnTest.build_conn()
+    conn = %Plug.Conn{conn | private: Map.put(conn.private, :phoenix_router, Router)}
+    {:ok, conn: conn}
   end
 end

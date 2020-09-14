@@ -15,6 +15,7 @@ defmodule Snowhite.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
+      docs: docs(),
       description: @description,
       package: package()
     ]
@@ -56,6 +57,61 @@ defmodule Snowhite.MixProject do
       {:eqrcode, "~> 0.1.7"},
       {:bitly, "~> 0.1"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+    ]
+  end
+
+  defp docs do
+    [
+      source_ref: "v#{@version}",
+      main: "overview",
+      extra_section: "GUIDES",
+      groups_for_modules: groups_for_modules(),
+      extras: extras(),
+      groups_for_extras: groups_for_extras()
+    ]
+  end
+
+  defp extras do
+    [
+      "guides/getting_started",
+      "guides/modules"
+    ]
+  end
+
+  defp groups_for_extras do
+    [
+      "Getting started": ~r/guides\/getting_started\/.?/,
+      Modules: ~r/guides\/modules\/.?/
+    ]
+  end
+
+  defp groups_for_modules do
+    [
+      Modules: [
+        Snowhite.Modules.Clock,
+        Snowhite.Modules.Weather.Current,
+        Snowhite.Modules.Weather.Forecast,
+        Snowhite.Modules.Rss
+      ],
+      Servers: [
+        Snowhite.Modules.Clock.Server,
+        Snowhite.Modules.Rss.Server,
+        Snowhite.Modules.Weather.Server
+      ],
+      Helpers: [
+        Snowhite.Helpers.Casing,
+        Snowhite.Helpers.Decoder,
+        Snowhite.Helpers.Html,
+        Snowhite.Helpers.List,
+        Snowhite.Helpers.Map,
+        Snowhite.Helpers.Module,
+        Snowhite.Helpers.Path,
+        Snowhite.Helpers.TaskRunner,
+        Snowhite.Helpers.Timing
+      ],
+      Clients: [
+        OpenWeather
+      ]
     ]
   end
 

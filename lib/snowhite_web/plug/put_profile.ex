@@ -36,7 +36,7 @@ defmodule SnowhiteWeb.Plug.PutProfile do
     end)
   end
 
-  @profile_header "X-Snowhite-Profile"
+  @profile_header "x-snowhite-profile"
   @profile_param "snowhite_profile"
   @fallback_profile "default"
   defp get_profile_name(%Plug.Conn{} = conn) do
