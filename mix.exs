@@ -73,8 +73,11 @@ defmodule Snowhite.MixProject do
 
   defp extras do
     [
-      "guides/getting_started",
-      "guides/modules"
+      "guides/overview.md",
+      "guides/getting_started/introduction.md",
+      "guides/modules/clock.md",
+      "guides/modules/rss.md",
+      "guides/modules/weather.md"
     ]
   end
 
@@ -89,9 +92,14 @@ defmodule Snowhite.MixProject do
     [
       Modules: [
         Snowhite.Modules.Clock,
+        Snowhite.Modules.Calendar,
+        Snowhite.Modules.CalendarBuilder,
+        Snowhite.Modules.Weather,
         Snowhite.Modules.Weather.Current,
         Snowhite.Modules.Weather.Forecast,
-        Snowhite.Modules.Rss
+        Snowhite.Modules.Rss,
+        Snowhite.Modules.Rss.Poller,
+        Snowhite.Modules.Rss.UrlShortener,
       ],
       Servers: [
         Snowhite.Modules.Clock.Server,
@@ -110,7 +118,29 @@ defmodule Snowhite.MixProject do
         Snowhite.Helpers.Timing
       ],
       Clients: [
-        OpenWeather
+        OpenWeather,
+        OpenWeather.Forecast,
+        OpenWeather.Forecast.City,
+        OpenWeather.Forecast.ForecastItem,
+        OpenWeather.Forecast.Temp,
+        OpenWeather.Weather,
+        OpenWeather.Weather.Main,
+        OpenWeather.Weather.WeatherItem
+      ],
+      Builder: [
+        Snowhite,
+        Snowhite.Builder,
+        Snowhite.Builder.Controller,
+        Snowhite.Builder.Layout,
+        Snowhite.Builder.Module,
+        Snowhite.Builder.Profile,
+        Snowhite.Builder.Supervisor
+      ],
+      Web: [
+        SnowhiteWeb,
+        SnowhiteWeb.Layouts.View,
+        SnowhiteWeb.Plug.PutProfile,
+        SnowhiteWeb.Profile.View
       ]
     ]
   end

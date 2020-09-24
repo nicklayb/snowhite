@@ -19,6 +19,7 @@ defmodule Snowhite.Modules.Rss.Server do
     GenServer.call(__MODULE__, :news)
   end
 
+  @spec init(keyword) :: {:ok, %{feeds: any, news: [], options: [{any, any}]}}
   def init(options) do
     feeds = Keyword.fetch!(options, :feeds)
     Logger.info("[#{__MODULE__}] Started with #{length(feeds)} feeds")
@@ -56,28 +57,31 @@ defmodule Snowhite.Modules.Rss.Server do
     news =
       feeds
       |> Poller.poll()
-      |> Enum.map(fn {name, rss} ->
-        entries = put_short_url(state, rss.entries)
+      |> Enum.map(fn
+        {name, %{entries: entries}} ->
+          entries = put_short_url(state, entries)
 
-        {name, entries}
+          {name, entries}
+
+        {name, _} ->
+          {name, []}
       end)
 
     %{state | news: news}
   end
 
-  defp put_short_url(%{options: options}, entries) do
-    if Keyword.get(options, :qr_codes, true) do
-      Enum.map(entries, fn entry ->
-        short =
-          entry
-          |> get_entry_url()
-          |> UrlShortener.shorten()
+  defp put_short_url(%{options: options}, entries) when is_list(entries) do
+    Enum.map(entries, fn entry ->
+      value = if Keyword.get(options, :qr_codes, true), do: put_short_url(entry), else: nil
 
-        Map.put(entry, :short_link, short)
-      end)
-    else
-      entries
-    end
+      Map.put(entry, :short_link, value)
+    end)
+  end
+
+  defp put_short_url(entry) do
+    entry
+    |> get_entry_url()
+    |> UrlShortener.shorten()
   end
 
   defp get_entry_url(entry) do

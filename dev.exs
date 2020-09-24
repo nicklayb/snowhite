@@ -58,7 +58,7 @@ defmodule Snowhite.Profiles.Default do
 
   register_module(:top_left, Snowhite.Modules.Rss,
     feeds: [
-      {"Hacker News", "https://hnrss.org/newest"}
+      {"L'Hebdo", "https://www.lhebdojournal.com/feed/rss2/"}
     ],
     persist_app: :snowhite
   )

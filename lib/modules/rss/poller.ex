@@ -27,7 +27,7 @@ defmodule Snowhite.Modules.Rss.Poller do
   end
 
   defp call(feed) do
-    result = HTTPoison.get(feed)
+    result = HTTPoison.get(feed, [], follow_redirect: true)
 
     case result do
       {:ok, %{status_code: status}} ->
