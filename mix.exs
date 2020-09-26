@@ -63,7 +63,6 @@ defmodule Snowhite.MixProject do
   defp docs do
     [
       source_ref: "v#{@version}",
-      main: "README.md",
       extra_section: "GUIDES",
       groups_for_modules: groups_for_modules(),
       extras: extras(),
@@ -73,7 +72,6 @@ defmodule Snowhite.MixProject do
 
   defp extras do
     [
-      "README.md",
       "guides/getting_started/introduction.md",
       "guides/modules/clock.md",
       "guides/modules/rss.md",
