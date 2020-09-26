@@ -63,7 +63,7 @@ defmodule Snowhite.MixProject do
   defp docs do
     [
       source_ref: "v#{@version}",
-      main: "overview",
+      main: "README.md",
       extra_section: "GUIDES",
       groups_for_modules: groups_for_modules(),
       extras: extras(),
@@ -73,7 +73,7 @@ defmodule Snowhite.MixProject do
 
   defp extras do
     [
-      "guides/overview.md",
+      "README.md",
       "guides/getting_started/introduction.md",
       "guides/modules/clock.md",
       "guides/modules/rss.md",
@@ -99,7 +99,7 @@ defmodule Snowhite.MixProject do
         Snowhite.Modules.Weather.Forecast,
         Snowhite.Modules.Rss,
         Snowhite.Modules.Rss.Poller,
-        Snowhite.Modules.Rss.UrlShortener,
+        Snowhite.Modules.Rss.UrlShortener
       ],
       Servers: [
         Snowhite.Modules.Clock.Server,
