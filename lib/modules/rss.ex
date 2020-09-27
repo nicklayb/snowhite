@@ -52,18 +52,8 @@ defmodule Snowhite.Modules.Rss do
     Timex.from_now(datetime, locale)
   end
 
-  def render_qr_code(item) do
-    item
-    |> news_link()
-    |> EQRCode.encode()
-    |> EQRCode.svg(viewbox: true)
-  end
-
-  defp news_link(item) do
-    case Map.get(item, :short_link) do
-      nil -> item[:"rss2:link"]
-      link -> link
-    end
+  def render_qr_code(%{qr_code: qr_code}) do
+    EQRCode.svg(qr_code, viewbox: true)
   end
 
   def scroll(%{assigns: %{news: news}} = socket) do
