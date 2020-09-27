@@ -35,7 +35,7 @@ defmodule Snowhite.Helpers.TaskRunnerTest do
 
       map_after = fn {:ok, v} -> to_string(v) end
 
-      assert %{first: "500", second: "1000"} = TaskRunner.run(tasks, map_after)
+      assert %{first: "500", second: "1000"} = TaskRunner.run(tasks, map_after: map_after)
     end
   end
 
