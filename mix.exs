@@ -91,7 +91,7 @@ defmodule Snowhite.MixProject do
       Modules: [
         Snowhite.Modules.Clock,
         Snowhite.Modules.Calendar,
-        Snowhite.Modules.CalendarBuilder,
+        Snowhite.Helpers.CalendarBuilder,
         Snowhite.Modules.Weather,
         Snowhite.Modules.Weather.Current,
         Snowhite.Modules.Weather.Forecast,

@@ -2,7 +2,7 @@ defmodule Snowhite.Modules.Calendar do
   use Snowhite.Builder.Module, topic: "snowhite:modules:clock"
   import Snowhite.Builder.Module
   alias Snowhite.Modules.Clock
-  alias Snowhite.Modules.CalendarBuilder
+  alias Snowhite.Helpers.CalendarBuilder
 
   def mount(socket) do
     {:ok, set_current_date(socket)}
