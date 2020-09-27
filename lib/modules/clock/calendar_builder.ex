@@ -1,5 +1,16 @@
 defmodule Snowhite.Modules.CalendarBuilder do
+  @moduledoc """
+  Builds a month calendar from a given date.
+  """
   @days_in_week 7
+  @type date :: Timex.Types.datetime() | Timex.Types.date()
+  @type calendar :: [week()]
+  @type week :: [date(), ...]
+
+  @doc """
+  Build the month calendar for the given date. It also pads days before and after the given month to give a full 7-day per week list of list of date.
+  """
+  @spec build_month(Timex.Types.datetime()) :: calendar()
   def build_month(current_date) do
     start_date = Timex.beginning_of_month(current_date)
     end_date = Timex.end_of_month(current_date)

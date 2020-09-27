@@ -1,19 +1,22 @@
 defmodule Snowhite.Modules.Rss.Poller do
+  @moduledoc """
+  Polls a given list of feeds in parrallel.
+  """
   require Logger
 
-  def poll(feeds) when is_list(feeds) do
-    tasks =
-      Enum.map(feeds, fn {name, feed} ->
-        {name, Task.async(fn -> poll(feed) end)}
-      end)
+  alias Snowhite.Helpers.TaskRunner
+  alias Snowhte.Modules.Rss
 
-    Enum.map(tasks, fn {name, pid} ->
-      with {:ok, feed} <- Task.await(pid) do
-        {name, feed}
-      else
-        _ -> {name, nil}
-      end
-    end)
+  @doc """
+  Polls given feeds in parrallel
+  """
+  @type feed :: [Rss.Server.feed()] | String.t()
+  @type loaded_feed :: {String.t(), [map()]} | {:error, any} | {:ok, any}
+  @spec poll(feed()) :: loaded_feed()
+  def poll(feeds) when is_list(feeds) do
+    feeds
+    |> Enum.map(&to_task_definition/1)
+    |> TaskRunner.run(map_after: &unwrap/1)
   end
 
   def poll(feed) when is_bitstring(feed) do
@@ -39,4 +42,9 @@ defmodule Snowhite.Modules.Rss.Poller do
 
     result
   end
+
+  defp to_task_definition({name, feed}), do: {name, &poll/1, [feed]}
+
+  defp unwrap({:ok, value}), do: value
+  defp unwrap(_), do: nil
 end

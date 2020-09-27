@@ -1,4 +1,7 @@
 defmodule Snowhite.Modules.Rss.UrlShortener do
+  @moduledoc """
+  Shortens url using Bitly and keeps the value persisted in a dets table
+  """
   use GenServer
   require Logger
 

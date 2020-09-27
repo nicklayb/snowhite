@@ -1,4 +1,7 @@
 defmodule Snowhite.Modules.Rss.Server do
+  @moduledoc """
+  Server that holds polled feeds and syncs them
+  """
   use GenServer
   import Snowhite.Helpers.Timing
   require Logger
@@ -6,6 +9,8 @@ defmodule Snowhite.Modules.Rss.Server do
   alias Snowhite.Modules.Rss.RssItem
 
   @auto_sync_timer ~d(15m)
+
+  @type feed :: {String.t(), String.t()}
 
   def start_link(args) do
     GenServer.start_link(__MODULE__, args, name: __MODULE__)

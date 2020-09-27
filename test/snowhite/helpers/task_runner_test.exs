@@ -26,6 +26,17 @@ defmodule Snowhite.Helpers.TaskRunnerTest do
       assert %{first: :ok} = TaskRunner.run(%{first: fn -> :ok end})
       assert [first: :ok] = TaskRunner.run(first: fn -> :ok end)
     end
+
+    test "should run without params and applies the giver map_after/1" do
+      tasks = %{
+        first: fn -> sleep_and_return(500) end,
+        second: fn -> sleep_and_return(1000) end
+      }
+
+      map_after = fn {:ok, v} -> to_string(v) end
+
+      assert %{first: "500", second: "1000"} = TaskRunner.run(tasks, map_after)
+    end
   end
 
   def sleep_and_return(ms) do

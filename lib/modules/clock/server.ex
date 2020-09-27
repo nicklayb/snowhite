@@ -1,4 +1,9 @@
 defmodule Snowhite.Modules.Clock.Server do
+  @moduledoc """
+  Atomic clock server that syncs the time between clock modules.
+
+  It ticks every seconds and updates itself
+  """
   use GenServer
   import Snowhite.Helpers.Timing
   require Logger

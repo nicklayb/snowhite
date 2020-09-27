@@ -1,9 +1,24 @@
 defmodule Snowhite.Modules.Rss.RssItem do
+  @moduledoc """
+  Represents a RSS item that is displayable in the view
+  """
   alias __MODULE__
   defstruct id: nil, title: nil, original_link: nil, link: nil, qr_code: nil, updated: nil
 
+  @type t :: %__MODULE__{}
   alias Snowhite.Modules.Rss.UrlShortener
 
+  @type raw_entry :: %{
+          :id => String.t(),
+          :title => String.t(),
+          :"rss2:link" => String.t(),
+          :updated => Timex.Types.datetime()
+        }
+  @type option :: {:qr_codes, boolean()} | {:short_link, boolean()}
+  @doc """
+  Casts a Rss entry to a RssItem and puts short url and qr_code.
+  """
+  @spec new(raw_entry(), [option()]) :: t()
   def new(entry, options \\ []) do
     link = Map.get(entry, :"rss2:link")
 
