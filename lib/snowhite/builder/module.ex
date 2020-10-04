@@ -97,6 +97,7 @@ defmodule Snowhite.Builder.Module do
   **Note**: It is not required to have the config put in the assign, this is just an example on how to use the config/1 function.
   """
   alias Snowhite.Helpers.Casing
+  alias Snowhite.Scheduler
   import Phoenix.LiveView
 
   @doc """

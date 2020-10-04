@@ -1,0 +1,26 @@
+$color: #EC6E4C;
+
+.snowhite-modules-suntime {
+  font-family: $font-family-sans;
+
+  h2 {
+    font-size: 1em;
+    color: darken($white, 30%);
+    margin-bottom: 1em;
+  }
+  .times {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1em;
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+      margin-right: 1.5em;
+    }
+    svg {
+      fill: $color;
+      height: 4em;
+    }
+  }
+}

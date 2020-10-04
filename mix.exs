@@ -3,7 +3,7 @@ defmodule Snowhite.MixProject do
 
   @github "https://github.com/nicklayb/snowhite"
   @description "Smart mirror framework"
-  @version "0.1.3"
+  @version "0.2.0"
   def project do
     [
       app: :snowhite,
@@ -75,7 +75,8 @@ defmodule Snowhite.MixProject do
       "guides/getting_started/introduction.md",
       "guides/modules/clock.md",
       "guides/modules/rss.md",
-      "guides/modules/weather.md"
+      "guides/modules/weather.md",
+      "guides/modules/suntime.md"
     ]
   end
 
@@ -91,18 +92,22 @@ defmodule Snowhite.MixProject do
       Modules: [
         Snowhite.Modules.Clock,
         Snowhite.Modules.Calendar,
-        Snowhite.Modules.CalendarBuilder,
+        Snowhite.Helpers.CalendarBuilder,
         Snowhite.Modules.Weather,
         Snowhite.Modules.Weather.Current,
         Snowhite.Modules.Weather.Forecast,
         Snowhite.Modules.Rss,
         Snowhite.Modules.Rss.Poller,
-        Snowhite.Modules.Rss.UrlShortener
+        Snowhite.Modules.Rss.UrlShortener,
+        Snowhite.Modules.Suntime,
+        Snowhite.Modules.Suntime.Server,
       ],
       Servers: [
         Snowhite.Modules.Clock.Server,
         Snowhite.Modules.Rss.Server,
-        Snowhite.Modules.Weather.Server
+        Snowhite.Modules.Weather.Server,
+        Snowhite.Modules.Suntime.Server,
+        Snowhite.Scheduler
       ],
       Helpers: [
         Snowhite.Helpers.Casing,
@@ -123,7 +128,9 @@ defmodule Snowhite.MixProject do
         OpenWeather.Forecast.Temp,
         OpenWeather.Weather,
         OpenWeather.Weather.Main,
-        OpenWeather.Weather.WeatherItem
+        OpenWeather.Weather.WeatherItem,
+        SunriseSunset,
+        SunriseSunset.Response
       ],
       Builder: [
         Snowhite,

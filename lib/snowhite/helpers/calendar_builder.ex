@@ -1,4 +1,4 @@
-defmodule Snowhite.Modules.CalendarBuilder do
+defmodule Snowhite.Helpers.CalendarBuilder do
   @moduledoc """
   Builds a month calendar from a given date.
   """
