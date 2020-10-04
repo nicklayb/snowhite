@@ -1,5 +1,5 @@
 defmodule Snowhite.Builder.Controller do
-  defmacro build do
+  defmacro build(_opts \\ []) do
     quote do
       defmodule Controller do
         use Phoenix.Controller, namespace: SnowhiteWeb

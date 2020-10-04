@@ -1,5 +1,7 @@
 defmodule Snowhite.Builder.Supervisor do
-  defmacro build do
+  defmacro build(opts \\ []) do
+    timezone = Keyword.get(opts, :timezone, "UTC")
+
     quote do
       defmodule ApplicationSupervisor do
         require Snowhite.Helpers.Module
@@ -12,9 +14,15 @@ defmodule Snowhite.Builder.Supervisor do
 
         @impl true
         def init(_) do
-          children = profile_applications()
-          pub_sub = {Phoenix.PubSub, name: Snowhite.PubSub}
-          Supervisor.init([pub_sub | children], strategy: :one_for_one)
+          children = default_children() ++ profile_applications()
+          Supervisor.init(children, strategy: :one_for_one)
+        end
+
+        defp default_children do
+          [
+            {Phoenix.PubSub, name: Snowhite.PubSub},
+            {Snowhite.Scheduler, timezone: unquote(timezone)}
+          ]
         end
 
         def profile_applications do

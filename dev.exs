@@ -33,8 +33,8 @@ Application.put_env(:snowhite, SnowhiteDemo.Endpoint,
 defmodule Snowhite.Profiles.Default do
   use Snowhite.Builder.Profile
 
-  @city_id "6167865"
   @timezone "America/Toronto"
+  @city_id "6167865"
   @locale "en"
   @units :metric
 
@@ -56,6 +56,13 @@ defmodule Snowhite.Profiles.Default do
     refresh: ~d(4h)
   )
 
+  register_module(:top_right, Snowhite.Modules.Suntime,
+    timezone: @timezone,
+    locale: @locale,
+    latitude: 43.653225,
+    longitude: -79.383186
+  )
+
   register_module(:top_left, Snowhite.Modules.Rss,
     feeds: [
       {"L'Hebdo", "https://www.lhebdojournal.com/feed/rss2/"}
@@ -65,7 +72,7 @@ defmodule Snowhite.Profiles.Default do
 end
 
 defmodule SnowhiteApp do
-  use Snowhite
+  use Snowhite, timezone: "America/Toronto"
 
   profile(:default, Snowhite.Profiles.Default)
 end

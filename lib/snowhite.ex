@@ -41,7 +41,7 @@ defmodule Snowhite do
   Imports required functions to build a Snowhite profile set.
   """
   @spec __using__(any()) :: Macro.t()
-  defmacro __using__(_) do
+  defmacro __using__(opts) do
     quote do
       @before_compile {Snowhite.Builder, :__before_compile__}
       require Snowhite.Builder.Supervisor
@@ -49,8 +49,8 @@ defmodule Snowhite do
       import Snowhite.Builder
       @profiles %{}
 
-      Snowhite.Builder.Supervisor.build()
-      Snowhite.Builder.Controller.build()
+      Snowhite.Builder.Supervisor.build(unquote(opts))
+      Snowhite.Builder.Controller.build(unquote(opts))
     end
   end
 
