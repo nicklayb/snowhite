@@ -28,7 +28,7 @@ defmodule Snowhite.Modules.Suntime.Server do
     lat = Keyword.fetch!(options, :latitude)
     lng = Keyword.fetch!(options, :longitude)
     Logger.info("[#{__MODULE__}] Started (#{inspect(options)})")
-    Scheduler.schedule(__MODULE__, @update_time, :update)
+    Scheduler.schedule(__MODULE__, @update_time, {self(), :update})
     send(self(), :update)
     {:ok, %{tz: tz, days: [], latitude: lat, longitude: lng}}
   end
@@ -57,6 +57,7 @@ defmodule Snowhite.Modules.Suntime.Server do
   @range 0..(@days - 1)
   defp call_api(%{tz: tz} = state) do
     date = Timex.now(tz)
+
     Enum.map(@range, fn modifier ->
       date = Timex.shift(date, days: modifier)
 
@@ -70,6 +71,7 @@ defmodule Snowhite.Modules.Suntime.Server do
     case SunriseSunset.get({lng, lat}, date) do
       {:ok, results} ->
         map_results(results, tz)
+
       _ ->
         %{sunrise: nil, sunset: nil}
     end
@@ -86,6 +88,7 @@ defmodule Snowhite.Modules.Suntime.Server do
       value
       |> Timex.to_datetime(timezone)
       |> DateTime.to_time()
+
     {name, value}
   end
 end
