@@ -65,7 +65,8 @@ defmodule Snowhite.Profiles.Default do
 
   register_module(:top_left, Snowhite.Modules.Rss,
     feeds: [
-      {"L'Hebdo", "https://www.lhebdojournal.com/feed/rss2/"}
+      {"L'Hebdo", "https://www.lhebdojournal.com/feed/rss2/"},
+      {"RC", "https://ici.radio-canada.ca/rss/4159"}
     ],
     persist_app: :snowhite
   )

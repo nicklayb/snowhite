@@ -6,7 +6,11 @@ defmodule Snowhite.Modules.Rss do
   every(~d(25s), :scroll, &scroll/1)
 
   def mount(socket) do
-    socket = update(socket)
+    socket =
+      socket
+      |> assign(:news, [])
+
+    send(self(), :updated)
 
     {:ok, socket}
   end

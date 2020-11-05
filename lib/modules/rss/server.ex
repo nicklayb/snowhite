@@ -64,7 +64,10 @@ defmodule Snowhite.Modules.Rss.Server do
       |> Poller.poll()
       |> Enum.map(fn
         {name, %{entries: entries}} ->
-          entries = Enum.map(entries, &RssItem.new(&1))
+          entries =
+            entries
+            |> Enum.reject(&invalid?/1)
+            |> Enum.map(&RssItem.new(&1))
 
           {name, entries}
 
@@ -73,5 +76,14 @@ defmodule Snowhite.Modules.Rss.Server do
       end)
 
     %{state | news: news}
+  end
+
+  @required_fields [:id, :title, :"rss2:link", :updated]
+  defp invalid?(item) do
+    Enum.any?(@required_fields, fn field ->
+      item
+      |> Map.get(field)
+      |> is_nil()
+    end)
   end
 end

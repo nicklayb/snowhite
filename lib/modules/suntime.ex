@@ -4,7 +4,13 @@ defmodule Snowhite.Modules.Suntime do
   alias __MODULE__
 
   def mount(socket) do
-    {:ok, update(socket)}
+    socket =
+      socket
+      |> assign(:days, [])
+
+    send(self(), :updated)
+
+    {:ok, socket}
   end
 
   def module_options do
@@ -12,7 +18,7 @@ defmodule Snowhite.Modules.Suntime do
       timezone: {:optional, "UTC"},
       locale: {:optional, "en"},
       longitude: :required,
-      latitude: :required,
+      latitude: :required
     }
   end
 
@@ -51,6 +57,7 @@ defmodule Snowhite.Modules.Suntime do
   def render(assigns) do
     sunrise_icon = @sunrise_icon
     sunset_icon = @sunset_icon
+
     ~L"""
       <div>
         <ul>
