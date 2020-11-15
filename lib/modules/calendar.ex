@@ -15,14 +15,15 @@ defmodule Snowhite.Modules.Calendar do
     }
   end
 
-  @ref_date Date.utc_today()
-  @weekdays Enum.map([6, 7, 1, 2, 3, 4, 5], fn day ->
-              if @ref_date.day != day do
-                Timex.shift(@ref_date, days: day - @ref_date.day)
-              else
-                @ref_date
-              end
-            end)
+  @weekdays [
+    ~D[2020-11-01],
+    ~D[2020-11-02],
+    ~D[2020-11-03],
+    ~D[2020-11-04],
+    ~D[2020-11-05],
+    ~D[2020-11-06],
+    ~D[2020-11-07]
+  ]
   def render(assigns) do
     weekdays = @weekdays
 
