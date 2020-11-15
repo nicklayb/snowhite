@@ -3,7 +3,7 @@ defmodule Snowhite.MixProject do
 
   @github "https://github.com/nicklayb/snowhite"
   @description "Smart mirror framework"
-  @version "0.2.2"
+  @version "0.2.3"
   def project do
     [
       app: :snowhite,
@@ -100,7 +100,7 @@ defmodule Snowhite.MixProject do
         Snowhite.Modules.Rss.Poller,
         Snowhite.Modules.Rss.UrlShortener,
         Snowhite.Modules.Suntime,
-        Snowhite.Modules.Suntime.Server,
+        Snowhite.Modules.Suntime.Server
       ],
       Servers: [
         Snowhite.Modules.Clock.Server,
