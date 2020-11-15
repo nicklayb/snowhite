@@ -4,6 +4,8 @@
 
 ![Snowhite demo](demo.gif "Snowhite demo")
 
+[Blog article about Snowhite](https://nboisvert.com/blog/so-i-built-a-smart-mirror-using-elixir)
+
 ## Fetching deps
 
 You need to fetch both node and elixir deps before playing with it. You can use the `make deps` target to do so.
