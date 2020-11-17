@@ -25,7 +25,7 @@ mix phx.new my_mirror --no-ecto
 
 Snowhite makes use of different profile to better split information. You can create multiple profile with multiple modules for different use cases. You first need to create the profile manager like the following. You **must** at least include a `:default` profile.
 
-We recommend that you pass in your timezone so the scheduler runs without your timezone. It fallbacks to UTC but if you want to use, for instance, the module Suntime, it might run at weird time instead of 1h am if you do not set your timezone. Unless, of course, if you live in the middle of the planet.
+We recommend that you pass in your timezone so the scheduler runs within your timezone. It fallbacks to UTC but if you want to use, for instance, the module Suntime, it might run at weird time instead of 1h am if you do not set your timezone. Unless, of course, if you live in the middle of the planet.
 
 ```elixir
 defmodule MyMirror.Profiles do
