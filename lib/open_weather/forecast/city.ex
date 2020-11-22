@@ -1,6 +1,9 @@
 defmodule OpenWeather.Forecast.City do
   @keys ~w(name id)a
   defstruct @keys
+  use Starchoice.Decoder
 
-  use Snowhite.Helpers.Decoder, @keys
+  defdecoder do
+    Enum.map(@keys, &field/1)
+  end
 end

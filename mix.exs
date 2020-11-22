@@ -3,7 +3,7 @@ defmodule Snowhite.MixProject do
 
   @github "https://github.com/nicklayb/snowhite"
   @description "Smart mirror framework"
-  @version "0.2.3"
+  @version "1.0.0"
   def project do
     [
       app: :snowhite,
@@ -56,6 +56,7 @@ defmodule Snowhite.MixProject do
       {:sweet_xml, "~> 0.6.6"},
       {:eqrcode, "~> 0.1.7"},
       {:bitly, "~> 0.1"},
+      {:starchoice, "~> 0.1.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
@@ -76,7 +77,8 @@ defmodule Snowhite.MixProject do
       "guides/modules/clock.md",
       "guides/modules/rss.md",
       "guides/modules/weather.md",
-      "guides/modules/suntime.md"
+      "guides/modules/suntime.md",
+      "guides/changelog.md"
     ]
   end
 
@@ -111,7 +113,6 @@ defmodule Snowhite.MixProject do
       ],
       Helpers: [
         Snowhite.Helpers.Casing,
-        Snowhite.Helpers.Decoder,
         Snowhite.Helpers.Html,
         Snowhite.Helpers.List,
         Snowhite.Helpers.Map,
