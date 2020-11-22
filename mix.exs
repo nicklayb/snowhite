@@ -100,6 +100,7 @@ defmodule Snowhite.MixProject do
         Snowhite.Modules.Weather.Forecast,
         Snowhite.Modules.Rss,
         Snowhite.Modules.Rss.Poller,
+        Snowhite.Modules.Rss.RssItem,
         Snowhite.Modules.Rss.UrlShortener,
         Snowhite.Modules.Suntime,
         Snowhite.Modules.Suntime.Server
@@ -109,7 +110,8 @@ defmodule Snowhite.MixProject do
         Snowhite.Modules.Rss.Server,
         Snowhite.Modules.Weather.Server,
         Snowhite.Modules.Suntime.Server,
-        Snowhite.Scheduler
+        Snowhite.Scheduler,
+        Snowhite.Scheduler.Schedule
       ],
       Helpers: [
         Snowhite.Helpers.Casing,
@@ -123,6 +125,7 @@ defmodule Snowhite.MixProject do
       ],
       Clients: [
         OpenWeather,
+        OpenWeather.Coord,
         OpenWeather.Forecast,
         OpenWeather.Forecast.City,
         OpenWeather.Forecast.ForecastItem,
