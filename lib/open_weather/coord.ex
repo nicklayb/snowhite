@@ -1,5 +1,5 @@
-defmodule OpenWeather.Forecast.Temp do
-  @keys ~w(day min max night eve morn)a
+defmodule OpenWeather.Coord do
+  @keys ~w(lat lng)a
   defstruct @keys
   use Starchoice.Decoder
 

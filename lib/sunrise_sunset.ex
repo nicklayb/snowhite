@@ -5,7 +5,7 @@ defmodule SunriseSunset do
   def get(coord, date) do
     with {:ok, %{body: json}} <- call(path(coord, date)),
          {:ok, %{"status" => "OK", "results" => results}} <- Jason.decode(json) do
-      {:ok, SunriseSunset.Response.decode(results)}
+      Starchoice.decode(results, SunriseSunset.Response)
     else
       {:error, error} -> {:error, error}
       {:ok, %{"status" => status}} -> {:error, status}

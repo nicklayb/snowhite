@@ -12,7 +12,7 @@ defmodule OpenWeather do
 
     with {:ok, %{status_code: status, body: body}} when status in @ok_statuses <- call(url),
          {:ok, json} <- Jason.decode(body) do
-      {:ok, OpenWeather.Weather.decode(json)}
+      Starchoice.decode(json, OpenWeather.Weather)
     else
       {:ok, %{status_code: status}} -> {:error, status}
       err -> err
@@ -24,7 +24,7 @@ defmodule OpenWeather do
 
     with {:ok, %{status_code: status, body: body}} when status in @ok_statuses <- call(url),
          {:ok, json} <- Jason.decode(body) do
-      {:ok, OpenWeather.Forecast.decode(json)}
+      Starchoice.decode(json, OpenWeather.Forecast)
     else
       {:ok, %{status_code: status}} -> {:error, status}
       err -> err

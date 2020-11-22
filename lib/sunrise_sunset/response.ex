@@ -1,9 +1,8 @@
 defmodule SunriseSunset.Response do
-  @keys ~w(
+  @dates ~w(
     sunrise
     sunset
     solar_noon
-    day_length
     civil_twilight_begin
     civil_twilight_end
     nautical_twilight_begin
@@ -11,14 +10,18 @@ defmodule SunriseSunset.Response do
     astronomical_twilight_begin
     astronomical_twilight_end
   )a
-  defstruct @keys
+  defstruct [:day_length] ++ @dates
+  use Starchoice.Decoder
 
-  use Snowhite.Helpers.Decoder, @keys
+  defdecoder do
+    field(:day_length)
 
-  def decode_field(:day_length, value), do: value
-  def decode_field(_, value), do: parse_utc_datetime(value)
+    Enum.map(@dates, fn field_name ->
+      field(field_name, with: &Response.parse_utc_datetime/1)
+    end)
+  end
 
-  defp parse_utc_datetime(value) do
+  def parse_utc_datetime(value) do
     Timex.parse!(value, "{RFC3339}")
   end
 end
