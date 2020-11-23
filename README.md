@@ -45,7 +45,12 @@ You can register any module in the Profile module using the `register_module/3` 
 defmodule MyMirror.Profiles.Default do
   use Snowhite.Builder.Profile
 
-  register_module(:top_left, Snowhite.Modules.Clock, locale: "fr")
+  configure(
+    locale: "fr"
+  )
+
+  register_module(:top_left, Snowhite.Modules.Clock) # will be french
+  register_module(:top_left, Snowhite.Modules.Clock, locale: "en") # will be english
 end
 ```
 
