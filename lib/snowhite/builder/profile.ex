@@ -13,7 +13,7 @@ defmodule Snowhite.Builder.Profile do
                 @layout,
                 unquote(position),
                 {unquote(module),
-                 ensure_options(unquote(module).module_options, unquote(options))}
+                 ensure_options(unquote(module).module_options, unquote(options), @global_options)}
               )
     end
   end
@@ -24,6 +24,13 @@ defmodule Snowhite.Builder.Profile do
       import Snowhite.Helpers.Timing
       @before_compile {Snowhite.Builder.Profile, :__before_compile__}
       @layout %Snowhite.Builder.Layout{}
+      @global_options []
+    end
+  end
+
+  defmacro configure(options) do
+    quote do
+      @global_options unquote(options)
     end
   end
 
@@ -41,9 +48,9 @@ defmodule Snowhite.Builder.Profile do
     end
   end
 
-  def ensure_options(pattern, options) do
+  def ensure_options(pattern, options, global_options) do
     {valid_options, invalid_options} =
-      Enum.reduce(pattern, {[], options}, fn
+      Enum.reduce(pattern, {[], apply_global_options(pattern, options, global_options)}, fn
         {key, :required}, {valid_options, rest_options} ->
           if not Keyword.has_key?(rest_options, key),
             do: raise("Required option `:#{key}` not provided")
@@ -62,5 +69,20 @@ defmodule Snowhite.Builder.Profile do
       [option | _] -> raise "Unsupported option `#{inspect(option)}` provided"
       _ -> valid_options
     end
+  end
+
+  def apply_global_options(pattern, options, global_options) do
+    Enum.reduce(pattern, options, fn {key, _}, acc ->
+      cond do
+        Keyword.has_key?(acc, key) ->
+          acc
+
+        Keyword.has_key?(global_options, key) ->
+          Keyword.put(acc, key, Keyword.get(global_options, key))
+
+        true ->
+          acc
+      end
+    end)
   end
 end

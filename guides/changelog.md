@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.1.0
+
+### New
+
+- Module options can now be globally defined using `configure/1` macro in Profiles. Example:
+
+```elixir
+configure(locale: "fr")
+
+register_module(:top_left, Snowhite.Modules.Clock) # Will be french
+register_module(:top_left, Snowhite.Modules.Clock, locale: "en") # Will be english
+```
+
 ## 1.0.0
 
 ### Deprecations
