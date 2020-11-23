@@ -17,7 +17,7 @@ defmodule SunriseSunset.Response do
     field(:day_length)
 
     Enum.map(@dates, fn field_name ->
-      field(field_name, with: &Response.parse_utc_datetime/1)
+      field(field_name, with: &SunriseSunset.Response.parse_utc_datetime/1)
     end)
   end
 

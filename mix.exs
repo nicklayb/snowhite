@@ -3,7 +3,7 @@ defmodule Snowhite.MixProject do
 
   @github "https://github.com/nicklayb/snowhite"
   @description "Smart mirror framework"
-  @version "1.1.0"
+  @version "1.1.1"
   def project do
     [
       app: :snowhite,
