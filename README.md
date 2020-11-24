@@ -96,11 +96,9 @@ Snowhite requires at least a js file located at `../deps/snowhite/assets/js/live
 
 ## Creating modules
 
-**Important note**: To keep your system easily updatable, try to not update existing file/module. Always create new files or update those that exists for such purpose such as `_override.scss` and `snowhite.ex`.
-
 You can create your own modules using either the `Snowhite.Builder.Module` or a any raw `Phoenix.LiveView` component.
 
-For most use case, you might prefer to use the `Snowhite.Builder.Module` as it includes [some convenient functions](#convenient-functions). To use Phoenix.LiveView, refer to [the documentation](https://hexdocs.pm/phoenix_live_view)
+For most use case, you might prefer to use the `Snowhite.Builder.Module` as it includes [some convenient functions](#convenient-functions). To use Phoenix.LiveView, refer to [the documentation](https://hexdocs.pm/phoenix_live_view).
 
 The only required function is `render/1` as shown below.
 
@@ -212,6 +210,12 @@ end
 ```
 
 In this example, an exception would raise saying that `{:locale, "fr"}` is not supported as option.
+
+### Data source
+
+Even though it can work perfectly, we recommend creating genserver to keep/update the data your module will use. Mainly because opening 3 instances of the same Snowhite app will use one central source of truth but also because they will be kept in perfect sync. If you keep the data in the live view, opening three instances of the same module will load three times the same data and will be out of sync unless you are able to start the three of the at the e x a c t same time.
+
+Default modules in Snowhite all includes a server, take a look to have a better understanding of it.
 
 ### Convenient functions
 
