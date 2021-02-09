@@ -62,10 +62,26 @@ defmodule Snowhite.Profiles.Default do
   )
 end
 
+defmodule Snowhite.Profiles.Simple do
+  use Snowhite.Builder.Profile
+
+  configure(
+    locale: "en",
+    city_id: "6167865",
+    units: :metric,
+    timezone: "America/Toronto"
+  )
+
+  register_module(:top_left, Snowhite.Modules.Clock)
+
+  register_module(:top_left, Snowhite.Modules.Calendar)
+end
+
 defmodule SnowhiteApp do
   use Snowhite, timezone: "America/Toronto"
 
   profile(:default, Snowhite.Profiles.Default)
+  profile(:simple, Snowhite.Profiles.Simple)
 end
 
 defmodule SnowhiteDemo.Router do

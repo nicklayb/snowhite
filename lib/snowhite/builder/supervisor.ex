@@ -26,7 +26,7 @@ defmodule Snowhite.Builder.Supervisor do
         end
 
         def profile_applications do
-          Enum.dedup_by(@parent_module.applications(), fn {mod, _} -> mod end)
+          Enum.uniq_by(@parent_module.applications(), fn {mod, _} -> mod end)
         end
       end
     end
