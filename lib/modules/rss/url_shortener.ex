@@ -1,9 +1,11 @@
 defmodule Snowhite.Modules.Rss.UrlShortener do
   @moduledoc """
-  Shortens url using Bitly and keeps the value persisted in a dets table
+  Shortens url using a given url shortener and keeps the value persisted in a dets table
   """
   use GenServer
   require Logger
+
+  @callback shorten(String.t()) :: {:ok, String.t()} | {:error, any()}
 
   def start_link(args) do
     GenServer.start_link(__MODULE__, args, name: __MODULE__)
@@ -50,11 +52,13 @@ defmodule Snowhite.Modules.Rss.UrlShortener do
   end
 
   defp shorten_url(url) do
-    with %Bitly.Link{status_code: 200, data: %{url: short_url}} <- Bitly.Link.shorten(url) do
-      Logger.info("[#{__MODULE__}] #{url} -> #{short_url}")
+    url_shortener = url_shortener()
+
+    with {:ok, short_url} <- url_shortener.shorten(url) do
+      Logger.info("[#{__MODULE__}] [#{inspect(url_shortener)}] #{url} -> #{short_url}")
       {:ok, short_url}
     else
-      data ->
+      {:error, data} ->
         Logger.warn("[#{__MODULE__}] error: #{inspect(data)}")
         {:error, data}
     end
@@ -104,5 +108,11 @@ defmodule Snowhite.Modules.Rss.UrlShortener do
     %{priv_path: priv_path, file: dets}
   rescue
     _ -> nil
+  end
+
+  defp url_shortener do
+    :snowhite
+    |> Application.get_env(__MODULE__, [])
+    |> Keyword.get(:url_shortener, __MODULE__.Bitly)
   end
 end
