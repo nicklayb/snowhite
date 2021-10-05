@@ -10,11 +10,18 @@ defmodule Snowhite.Modules.Weather.Forecast do
   end
 
   def render(assigns) do
+    case get_option(assigns, :display) do
+      :inline -> render_inline(assigns)
+      :topdown -> render_topdown(assigns)
+    end
+  end
+
+  defp render_topdown(assigns) do
     units = get_option(assigns, :units)
     locale = get_option(assigns, :locale)
 
     ~L"""
-      <table class="forecasts">
+      <table class="forecasts topdown">
         <tbody>
         <%= for %{dt: dt, main: main, weather: [weather | _]} <- @forecasts do %>
           <tr>
@@ -25,6 +32,23 @@ defmodule Snowhite.Modules.Weather.Forecast do
         <% end %>
       </tbody>
     </table>
+    """
+  end
+
+  defp render_inline(assigns) do
+    units = get_option(assigns, :units)
+    locale = get_option(assigns, :locale)
+
+    ~L"""
+      <div class="forecasts inline">
+        <%= for %{dt: dt, main: main, weather: [weather | _]} <- @forecasts do %>
+          <div class="forecast-item">
+            <div><img src="<%= WeatherItem.icon_url(weather, "") %>"></div>
+            <div><h2 class="temperature <%= units %>"><%= round(main.temp) %></h2></div>
+            <div><h3><%= String.at(day_name(dt, locale), 0) %></h3></div>
+          </div>
+        <% end %>
+    </div>
     """
   end
 
@@ -42,6 +66,9 @@ defmodule Snowhite.Modules.Weather.Forecast do
     assign(socket, :forecasts, forecasts)
   end
 
+  def module_options do
+    Map.put(Snowhite.Modules.Weather.module_options(), :display, {:optional, :topdown})
+  end
+
   defdelegate applications(options), to: Snowhite.Modules.Weather
-  defdelegate module_options(), to: Snowhite.Modules.Weather
 end

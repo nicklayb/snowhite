@@ -4,7 +4,7 @@ $color: #EC6E4C;
   font-family: $font-family-sans;
 
   h2 {
-    font-size: 1em;
+    font-size: 0.9em;
     color: darken($white, 30%);
     margin-bottom: 1em;
   }
@@ -16,11 +16,13 @@ $color: #EC6E4C;
     & > div {
       display: flex;
       flex-direction: column;
-      margin-right: 1.5em;
+      &:first-child {
+        margin-right: 1.5em;
+      }
     }
     svg {
       fill: $color;
-      height: 4em;
+      height: 3em;
     }
   }
 }

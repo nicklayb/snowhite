@@ -25,3 +25,8 @@ The server do both calls in parrallel then notifies the view. It keeps a custom 
 - `units`: (`unit`, optional) Unit to display weather info (either metric or imperial); fallbacks to `metric`
   - `unit`: `:metric | :imperial`
 - `refresh`: (`integer`, optional) Numbers of milliseconds before refreshing the weather; fallbacks `~d(1h)`
+
+### Options specific to forecasts
+
+- `display`: (`display`, optional) Display to use from either topdown (default and classic) or inline, a more concised display.
+  - `displayt`: `topdown | inline`

@@ -46,7 +46,7 @@ defmodule Snowhite.Profiles.Default do
 
   register_module(:top_right, Snowhite.Modules.Weather.Current, refresh: ~d(4h))
 
-  register_module(:top_right, Snowhite.Modules.Weather.Forecast, refresh: ~d(4h))
+  register_module(:top_right, Snowhite.Modules.Weather.Forecast, refresh: ~d(4h), display: :inline)
 
   register_module(:top_right, Snowhite.Modules.Suntime,
     latitude: 43.653225,
