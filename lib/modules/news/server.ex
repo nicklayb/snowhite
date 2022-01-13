@@ -1,16 +1,13 @@
 defmodule Snowhite.Modules.News.Server do
   use GenServer
 
-  alias Snowhite.Helpers.List, as: ListHelpers
-  alias Snowhite.Modules.News
   alias Snowhite.Modules.News.Item
+  alias Snowhite.Modules.News.Feed
   alias Snowhite.UrlShortener
   import Snowhite.Helpers.Timing
   require Logger
 
   @auto_sync_timer ~d(15m)
-
-  @default_adapter News.Adapters.Rss
 
   @spec start_link(any) :: GenServer.on_start()
   def start_link(args) do
@@ -62,30 +59,20 @@ defmodule Snowhite.Modules.News.Server do
   end
 
   defp update(%{feeds: feeds} = state) do
-    news =
-      feeds
-      |> Task.async_stream(&poll_feed/1)
-      |> ListHelpers.filter_map(&succeeded?/1, &map_item(&1, state))
+    news = Enum.map(feeds, &map_item(&1, state))
 
     %{state | news: news}
   end
 
-  defp map_item({:ok, {name, news}}, state) do
+  defp map_item(%Feed{name: name} = feed, state) do
     news =
-      Enum.map(news, fn item ->
+      feed
+      |> Feed.call_adapter()
+      |> Enum.map(fn item ->
         item
         |> shorten_url(state)
         |> put_qr_code(state)
       end)
-
-    {name, news}
-  end
-
-  defp succeeded?({:ok, {_, _}}), do: true
-  defp succeeded?(_), do: false
-
-  defp poll_feed(%{name: name, url: url, options: options, adapter: adapter}) do
-    news = apply(adapter, :fetch, [url, options])
 
     {name, news}
   end
@@ -116,15 +103,6 @@ defmodule Snowhite.Modules.News.Server do
   end
 
   defp init_feeds(feeds) do
-    Enum.map(feeds, fn
-      %{name: name, url: url} = params ->
-        adapter = Map.get(params, :adapter, @default_adapter)
-        options = Map.get(params, :options, %{})
-
-        %{url: url, name: name, adapter: adapter, options: options}
-
-      {name, url} when is_bitstring(url) ->
-        %{url: url, name: name, adapter: @default_adapter, options: %{}}
-    end)
+    Enum.map(feeds, &Feed.new/1)
   end
 end

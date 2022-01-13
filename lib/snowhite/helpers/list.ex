@@ -25,7 +25,7 @@ defmodule Snowhite.Helpers.List do
   end
 
   @doc "Filters and maps a list with two different function"
-  @spec filter_map([any()], (any() -> boolean()), (any() -> any())) :: [any()]
+  @spec filter_map(Enum.t(), (any() -> boolean()), (any() -> any())) :: [any()]
   def filter_map(items, filter_function, map_function) do
     items
     |> Enum.reduce([], fn item, acc ->
