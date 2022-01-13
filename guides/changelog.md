@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.0.0
+
+### Deprecations
+
+#### RSS now News
+
+Removed the `Rss` module for a `News` module. The `News` module is a drop in replacement as it defaults to RSS. You can just change the following
+
+```elixir
+register_module(:top_left, Snowhite.Modules.Rss, ...)
+# to
+register_module(:top_left, Snowhite.Modules.News, ...)
+```
+
+It nows supports other adapter than RSS. It comes with a JSON one but you can implement the one you want for XML as an example.
+
 ## 1.1.0
 
 ### New
