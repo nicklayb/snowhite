@@ -1,5 +1,5 @@
-$rss-svg-size: 60px;
-.snowhite-modules-rss {
+$news-svg-size: 60px;
+.snowhite-modules-news {
   font-family: $font-family-sans;
   ul.feeds > li {
     font-weight: bold;
@@ -25,10 +25,10 @@ $rss-svg-size: 60px;
       }
 
       svg {
-        min-width: $rss-svg-size;
-        min-height: $rss-svg-size;
-        max-width: $rss-svg-size;
-        max-height: $rss-svg-size;
+        min-width: $news-svg-size;
+        min-height: $news-svg-size;
+        max-width: $news-svg-size;
+        max-height: $news-svg-size;
         margin-right: 1em;
       }
 

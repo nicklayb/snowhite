@@ -1,5 +1,5 @@
-defmodule Snowhite.Modules.Rss.UrlShortener.Bitly do
-  @behaviour Snowhite.Modules.Rss.UrlShortener
+defmodule Snowhite.UrlShortener.Bitly do
+  @behaviour Snowhite.UrlShortener
 
   def shorten(url) do
     with %Bitly.Link{status_code: 200, data: %{url: short_url}} <- Bitly.Link.shorten(url) do

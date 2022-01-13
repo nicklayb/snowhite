@@ -1,4 +1,4 @@
-defmodule Snowhite.Modules.Rss.UrlShortener do
+defmodule Snowhite.UrlShortener do
   @moduledoc """
   Shortens url using a given url shortener and keeps the value persisted in a dets table
   """
