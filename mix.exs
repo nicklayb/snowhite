@@ -75,7 +75,7 @@ defmodule Snowhite.MixProject do
     [
       "guides/getting_started/introduction.md",
       "guides/modules/clock.md",
-      "guides/modules/rss.md",
+      "guides/modules/news.md",
       "guides/modules/weather.md",
       "guides/modules/suntime.md",
       "guides/changelog.md"
