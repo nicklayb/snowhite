@@ -1,6 +1,6 @@
-# RSS
+# News
 
-The RSS feed is a handy way to get your local news right on your mirror. One feature that is even more handy within the feeds is the phone accessible QR code that you can show beside your news.
+The News feed is a handy way to get your local news right on your mirror. One feature that is even more handy within the feeds is the phone accessible QR code that you can show beside your news.
 
 *Note: Reading the QR from your phone might be harder as QRs are quite close. If your having difficulties, check your phone's app store if it has an app that let's you scan multiple QR at once.*
 
@@ -19,7 +19,7 @@ So help me to help you, if you use another server for url shortening that you wo
 ## Options
 
 - `feeds`: (`[feed]`, required) List of RSS feeds to fetch
-  - `feed`: A tuple `{name, feed_url}`.
+  - `feed`: A tuple `{name, feed_url}` which defaults to the RSS adapter. To use a other adapters, see the `Snowhite.Modules.News.Adapter` module documentaiton. To override the adapter, it needs to be a map with `:name`, `:url`, `:adapter` and, optionally, `:options` for the adapter.
 - `persist_app`: (`atom`, required) Your app's atom name. This is required so the dets can be persisted. If your project is called `MyAwesomeProject`, then the atom name should be `my_awesome_project` and the dets will be persisted in the app's privs.
 - `visible_news`: (`integer`, optional) Sets the number of news to be visible on the page; fallbacks to `3`
 - `qr_codes`: (`boolean`, optional) Flags to toggle the use of QR codes; fallbacks to `true`
@@ -27,12 +27,12 @@ So help me to help you, if you use another server for url shortening that you wo
 
 ## Server
 
-As QR generation quite greedy, the server holds instances of `RssItem` of the every rss feed item with QR codes already generated. They are simply displayed as SVG in the page.
+As QR generation quite greedy, the server holds instances of `News.Item` of the every news feed item with QR codes already generated. They are simply displayed as SVG in the page.
 
 ### Another url shortener
 
-In case you have a different way to shorten your URLs, you can implement the `Snowhite.Modules.Rss.UrlShortener` behaviour and provide your own implementation through the following config
+In case you have a different way to shorten your URLs, you can implement the `Snowhite.UrlShortener` behaviour and provide your own implementation through the following config
 
 ```elixir
-config :snowhite, Snowhite.Modules.Rss.UrlShortener, url_shortener: MyApp.MyShortener
+config :snowhite, Snowhite.UrlShortener, url_shortener: MyApp.MyShortener
 ```

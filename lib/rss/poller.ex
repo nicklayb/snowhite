@@ -1,16 +1,15 @@
-defmodule Snowhite.Modules.Rss.Poller do
+defmodule Rss.Poller do
   @moduledoc """
   Polls a given list of feeds in parrallel.
   """
   require Logger
 
   alias Snowhite.Helpers.TaskRunner
-  alias Snowhte.Modules.Rss
 
   @doc """
   Polls given feeds in parrallel
   """
-  @type feed :: [Rss.Server.feed()] | String.t()
+  @type feed :: [{String.t(), String.t()}] | String.t()
   @type loaded_feed :: {String.t(), [map()]} | {:error, any} | {:ok, any}
   @spec poll(feed()) :: loaded_feed()
   def poll(feeds) when is_list(feeds) do

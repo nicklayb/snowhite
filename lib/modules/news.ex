@@ -1,4 +1,4 @@
-defmodule Snowhite.Modules.Rss do
+defmodule Snowhite.Modules.News do
   use Snowhite.Builder.Module
 
   alias __MODULE__
@@ -40,8 +40,8 @@ defmodule Snowhite.Modules.Rss do
                 <li>
                   <%= if qr_code?, do: Phoenix.HTML.raw(render_qr_code(item)) %>
                   <div>
-                    <a href="<%= item.id %>"><%= item.title %></a>
-                    <small><%= format_date(locale, item.updated) %></small>
+                    <a href="<%= item.original_url %>"><%= item.title %></a>
+                    <small><%= format_date(locale, item.date) %></small>
                   </div>
                 </li>
               <% end %>
@@ -71,7 +71,7 @@ defmodule Snowhite.Modules.Rss do
   end
 
   defp update(socket) do
-    news = Rss.Server.news()
+    news = News.Server.news()
 
     assign(socket, :news, news)
   end
@@ -82,8 +82,8 @@ defmodule Snowhite.Modules.Rss do
     persist_app = Keyword.fetch!(options, :persist_app)
 
     [
-      {Rss.Server, [feeds: feeds, qr_codes: qr_codes]},
-      {Rss.UrlShortener, [persist_app: persist_app]}
+      {News.Server, [feeds: feeds, qr_codes: qr_codes]},
+      {Snowhite.UrlShortener, [persist_app: persist_app]}
     ]
   end
 end
