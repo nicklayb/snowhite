@@ -1,0 +1,47 @@
+$negative-color: red;
+$positive-color: green;
+$even-color: gray;
+$symbol-padding: 0.4rem;
+
+.snowhite-modules-stockmarket {
+  font-family: $font-family-sans;
+
+  .wrapper {
+    display: flex;
+  }
+
+  .symbol {
+    padding-left: $symbol-padding;
+    padding-right: $symbol-padding;
+    text-align: center;
+  }
+
+  h1 {
+    font-weight: bold;
+    color: #FCFCFC
+  }
+
+  h1, h2 {
+    margin-bottom: 0.3rem;
+  }
+
+  h2.value::after {
+    content: "$";
+  }
+
+  h2.change::after {
+    content: "%";
+  }
+
+  .symbol.symbol-positive h2.change {
+    color: $positive-color;
+  }
+
+  .symbol.symbol-negative h2.change {
+    color: $negative-color;
+  }
+
+  .symbol.symbol-even h2.change {
+    color: $even-color;
+  }
+}
