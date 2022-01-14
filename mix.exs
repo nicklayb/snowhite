@@ -3,7 +3,7 @@ defmodule Snowhite.MixProject do
 
   @github "https://github.com/nicklayb/snowhite"
   @description "Smart mirror framework"
-  @version "2.0.0"
+  @version "2.1.0"
   def project do
     [
       app: :snowhite,
@@ -56,7 +56,7 @@ defmodule Snowhite.MixProject do
       {:sweet_xml, "~> 0.6.6"},
       {:eqrcode, "~> 0.1.7"},
       {:bitly, "~> 0.1"},
-      {:starchoice, "~> 0.1.0"},
+      {:starchoice, "~> 0.2.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
@@ -76,6 +76,7 @@ defmodule Snowhite.MixProject do
       "guides/getting_started/introduction.md",
       "guides/modules/clock.md",
       "guides/modules/news.md",
+      "guides/modules/stock_market.md",
       "guides/modules/weather.md",
       "guides/modules/suntime.md",
       "guides/changelog.md"
@@ -103,7 +104,12 @@ defmodule Snowhite.MixProject do
         Snowhite.Modules.News.NewsItem,
         Snowhite.UrlShortener,
         Snowhite.Modules.Suntime,
-        Snowhite.Modules.Suntime.Server
+        Snowhite.Modules.Suntime.Server,
+        Snowhite.Modules.StockMarket,
+        Snowhite.Modules.StockMarket.Server,
+        Snowhite.Modules.StockMarket.Symbol,
+        Snowhite.Modules.StockMarket.Adapter,
+        Snowhite.Modules.StockMarket.Adapters.Finnhub
       ],
       Servers: [
         Snowhite.Modules.Clock.Server,
@@ -124,6 +130,8 @@ defmodule Snowhite.MixProject do
         Snowhite.Helpers.Timing
       ],
       Clients: [
+        Finnhub,
+        Finnhub.Quote,
         OpenWeather,
         OpenWeather.Coord,
         OpenWeather.Forecast,

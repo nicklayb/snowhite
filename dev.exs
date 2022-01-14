@@ -44,6 +44,8 @@ defmodule Snowhite.Profiles.Default do
 
   register_module(:top_left, Snowhite.Modules.Calendar)
 
+  register_module(:top_left, Snowhite.Modules.StockMarket, symbols: ["PENN", "MSFT", "AAPL"])
+
   register_module(:top_right, Snowhite.Modules.Weather.Current, refresh: ~d(4h))
 
   register_module(:top_right, Snowhite.Modules.Weather.Forecast, refresh: ~d(4h), display: :inline)
@@ -131,6 +133,7 @@ end
 Application.put_env(:phoenix, :serve_endpoints, true)
 Application.put_env(:phoenix, :json_library, Jason)
 Application.put_env(:bitly, :access_token, System.get_env("BITLY_TOKEN"))
+Application.put_env(:snowhite, Finnhub, api_key: System.get_env("FINNHUB_API_KEY"))
 
 Task.start(fn ->
   children = [
