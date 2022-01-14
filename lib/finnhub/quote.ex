@@ -12,6 +12,19 @@ defmodule Finnhub.Quote do
 
   use Starchoice.Decoder
 
+  alias __MODULE__
+
+  @type t :: %Quote{
+          current_price: float(),
+          change: float(),
+          percent_change: float(),
+          high_price: float(),
+          low_price: float(),
+          open_price: float(),
+          previous_close_price: float(),
+          timestamp: integer()
+        }
+
   defdecoder do
     field(:current_price, source: "c")
     field(:change, source: "d")
