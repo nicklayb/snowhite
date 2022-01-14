@@ -14,8 +14,7 @@ defmodule Snowhite.Modules.StockMarket do
     %{
       symbols: :required,
       adapter: {:optional, StockMarket.Adapters.Finnhub},
-      adapter_options: {:optional, []},
-      name: {:optional, nil}
+      adapter_options: {:optional, []}
     }
   end
 
