@@ -1,7 +1,7 @@
 defmodule SunriseSunset do
   require Logger
   @type coord :: {float(), float()}
-  @spec get(coord(), Timex.Types.date()) :: {:ok, SunsetSunrise.Response.t()} | {:error, any()}
+  @spec get(coord(), DateTime.t()) :: {:ok, SunsetSunrise.Response.t()} | {:error, any()}
   def get(coord, date) do
     with {:ok, %{body: json}} <- call(path(coord, date)),
          {:ok, %{"status" => "OK", "results" => results}} <- Jason.decode(json) do
@@ -18,10 +18,10 @@ defmodule SunriseSunset do
 
     case result do
       {:ok, %{status_code: status}} ->
-        Logger.info("[#{__MODULE__}] [#{status}] #{url}")
+        Logger.info("[#{inspect(__MODULE__)}] [#{status}] #{url}")
 
       {:error, error} ->
-        Logger.warn("[#{__MODULE__}] failed: #{error}")
+        Logger.warn("[#{inspect(__MODULE__)}] failed: #{inspect(error)}")
     end
 
     result

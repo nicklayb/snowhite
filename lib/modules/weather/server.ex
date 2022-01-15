@@ -20,7 +20,7 @@ defmodule Snowhite.Modules.Weather.Server do
   end
 
   def init(options) do
-    Logger.info("[#{__MODULE__}] Started")
+    Logger.info("[#{inspect(__MODULE__)}] Started")
     update()
     Process.send_after(self(), :auto_sync, Keyword.fetch!(options, :refresh))
     {:ok, %{options: options, forecasts: [], weather: nil}}

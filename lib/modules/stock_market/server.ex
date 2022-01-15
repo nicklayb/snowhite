@@ -20,22 +20,24 @@ defmodule Snowhite.Modules.StockMarket.Server do
   end
 
   @impl GenServer
-  def init(opts) do
-    symbols = Keyword.fetch!(opts, :symbols)
-    adapter = Keyword.fetch!(opts, :adapter)
-    adapter_options = Keyword.get(opts, :adapter_options, [])
+  def init(options) do
+    send(self(), {:sync, true})
 
-    send(self(), :sync)
-
-    {:ok, %{prices: [], symbols: symbols, adapter: adapter, adapter_options: adapter_options}}
+    {:ok, init_state(options)}
   end
 
   @impl GenServer
-  def handle_info(:sync, state) do
-    state = update_prices(state)
-    Phoenix.PubSub.broadcast!(Snowhite.PubSub, "snowhite:modules:stockmarket", :updated)
+  def handle_info({:sync, force?}, state) do
+    state =
+      if force? or market_open?(state) do
+        state = update_prices(state)
+        Phoenix.PubSub.broadcast!(Snowhite.PubSub, "snowhite:modules:stockmarket", :updated)
+        state
+      else
+        state
+      end
 
-    Process.send_after(self(), :sync, @sync_timer)
+    Process.send_after(self(), {:sync, false}, @sync_timer)
 
     {:noreply, state}
   end
@@ -46,19 +48,54 @@ defmodule Snowhite.Modules.StockMarket.Server do
   end
 
   defp update_prices(
-         %{adapter: adapter, symbols: symbols, adapter_options: adapter_options} = state
+         %{adapter: adapter, symbols: symbols, adapter_options: adapter_options, prices: prices} =
+           state
        ) do
     prices =
-      Enum.reduce(symbols, [], fn symbol, acc ->
+      Enum.reduce(symbols, prices, fn symbol, acc ->
         case StockMarket.Adapter.invoke(adapter, symbol, adapter_options) do
           nil ->
             acc
 
-          symbol ->
-            [symbol | acc]
+          symbol_struct ->
+            Map.put(acc, symbol, symbol_struct)
         end
       end)
 
     Map.put(state, :prices, prices)
   end
+
+  defp init_state(options) do
+    symbols = Keyword.fetch!(options, :symbols)
+    adapter = Keyword.fetch!(options, :adapter)
+    timezone = Keyword.fetch!(options, :timezone)
+    adapter_options = Keyword.get(options, :adapter_options, [])
+
+    %{
+      prices: %{},
+      symbols: symbols,
+      adapter: adapter,
+      adapter_options: adapter_options,
+      timezone: timezone
+    }
+  end
+
+  defp market_open?(%{timezone: timezone}) do
+    timezone
+    |> Timex.now()
+    |> market_open?()
+  end
+
+  defp market_open?(%DateTime{} = now) do
+    business_day?(now) and after_opening_hour?(now) and before_closing_hour?(now)
+  end
+
+  defp after_opening_hour?(%{hour: hour}) when hour >= 9, do: true
+  defp after_opening_hour?(_), do: true
+
+  defp before_closing_hour?(%{hour: hour}) when hour < 17, do: true
+  defp before_closing_hour?(_), do: false
+
+  @business_days 1..5
+  defp business_day?(date), do: Timex.weekday(date) in @business_days
 end

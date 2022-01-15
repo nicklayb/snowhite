@@ -55,11 +55,11 @@ defmodule Snowhite.UrlShortener do
     url_shortener = url_shortener()
 
     with {:ok, short_url} <- url_shortener.shorten(url) do
-      Logger.info("[#{__MODULE__}] [#{inspect(url_shortener)}] #{url} -> #{short_url}")
+      Logger.info("[#{inspect(__MODULE__)}] [#{inspect(url_shortener)}] #{url} -> #{short_url}")
       {:ok, short_url}
     else
       {:error, data} ->
-        Logger.warn("[#{__MODULE__}] error: #{inspect(data)}")
+        Logger.warn("[#{inspect(__MODULE__)}] error: #{inspect(data)}")
         {:error, data}
     end
   end

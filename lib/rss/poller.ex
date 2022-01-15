@@ -33,10 +33,10 @@ defmodule Rss.Poller do
 
     case result do
       {:ok, %{status_code: status}} ->
-        Logger.info("[#{__MODULE__}] [#{status}] #{feed}")
+        Logger.info("[#{inspect(__MODULE__)}] [#{status}] #{feed}")
 
       error ->
-        Logger.warn("[#{__MODULE__}] [#{inspect(error)}] #{feed}")
+        Logger.warn("[#{inspect(__MODULE__)}] [#{inspect(error)}] #{feed}")
     end
 
     result

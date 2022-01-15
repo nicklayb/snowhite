@@ -18,16 +18,18 @@ defmodule Finnhub do
     with {:ok, %HTTPoison.Response{body: body, status_code: 200}} <-
            HTTPoison.get(url, headers(), follow_redirect: true),
          {:ok, json} <- Jason.decode(body) do
-      Logger.info("[#{__MODULE__}] [#{symbol}] Polled")
+      Logger.info("[#{inspect(__MODULE__)}] [#{symbol}] Polled")
       Starchoice.decode(json, Finnhub.Quote)
     else
       {:ok, %{status_code: status_code} = response} ->
-        Logger.error("[#{__MODULE__}] [#{symbol}] [#{status_code}] Error polling #{symbol}")
+        Logger.error(
+          "[#{inspect(__MODULE__)}] [#{symbol}] [#{status_code}] Error polling #{symbol}"
+        )
 
         {:error, response}
 
       {:error, error} ->
-        Logger.error("[#{__MODULE__}] [#{symbol}] #{inspect(error)}")
+        Logger.error("[#{inspect(__MODULE__)}] [#{symbol}] #{inspect(error)}")
 
         {:error, error}
     end

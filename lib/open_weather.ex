@@ -45,10 +45,10 @@ defmodule OpenWeather do
 
     case result do
       {:ok, %{status_code: status}} ->
-        Logger.info("[#{__MODULE__}] [#{status}] #{url}")
+        Logger.info("[#{inspect(__MODULE__)}] [#{status}] #{url}")
 
       {:error, error} ->
-        Logger.warn("[#{__MODULE__}] failed: #{error}")
+        Logger.warn("[#{inspect(__MODULE__)}] failed: #{error}")
     end
 
     result

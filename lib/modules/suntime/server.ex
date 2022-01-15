@@ -27,7 +27,7 @@ defmodule Snowhite.Modules.Suntime.Server do
     tz = Keyword.get(options, :timezone, @fallback_timezone)
     lat = Keyword.fetch!(options, :latitude)
     lng = Keyword.fetch!(options, :longitude)
-    Logger.info("[#{__MODULE__}] Started (#{inspect(options)})")
+    Logger.info("[#{inspect(__MODULE__)}] Started (#{inspect(options)})")
     Scheduler.schedule(__MODULE__, @update_time, {self(), :update})
     send(self(), :update)
     {:ok, %{tz: tz, days: [], latitude: lat, longitude: lng}}

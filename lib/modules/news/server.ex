@@ -29,7 +29,7 @@ defmodule Snowhite.Modules.News.Server do
   @impl GenServer
   def init(options) do
     {feeds, options} = Keyword.pop!(options, :feeds)
-    Logger.info("[#{__MODULE__}] Started with #{length(feeds)} feeds")
+    Logger.info("[#{inspect(__MODULE__)}] Started with #{length(feeds)} feeds")
     send(self(), :auto_sync)
     {:ok, %{options: options, feeds: init_feeds(feeds), news: []}}
   end
