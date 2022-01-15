@@ -14,14 +14,15 @@ defmodule Snowhite.Modules.StockMarket do
     %{
       symbols: :required,
       adapter: {:optional, StockMarket.Adapters.Finnhub},
-      adapter_options: {:optional, []}
+      adapter_options: {:optional, []},
+      timezone: {:optional, "UTC"}
     }
   end
 
   def render(assigns) do
     ~L"""
       <div class="wrapper">
-        <%= for %Symbol{symbol: symbol, value: value, change: change} <- @prices do %>
+        <%= for {_, %Symbol{symbol: symbol, value: value, change: change}} <- @prices do %>
           <div class="symbol symbol-<%= color(change) %>">
             <h1><%= symbol %></h1>
             <h2 class="value"><%= Float.round(value, 2) %> </h2>

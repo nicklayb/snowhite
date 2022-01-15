@@ -26,7 +26,7 @@ defmodule Snowhite.Modules.Clock.Server do
   end
 
   def init(options) do
-    Logger.info("[#{__MODULE__}] Started (#{inspect(options)})")
+    Logger.info("[#{inspect(__MODULE__)}] Started (#{inspect(options)})")
     Process.send_after(self(), :auto_sync, @auto_sync_timer)
     {:ok, update(%{options: options, time: nil})}
   end
