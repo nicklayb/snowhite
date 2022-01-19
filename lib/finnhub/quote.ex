@@ -26,13 +26,16 @@ defmodule Finnhub.Quote do
         }
 
   defdecoder do
-    field(:current_price, source: "c")
-    field(:change, source: "d")
-    field(:percent_change, source: "dp")
-    field(:high_price, source: "h")
-    field(:low_price, source: "l")
-    field(:open_price, source: "o")
-    field(:previous_close_price, source: "pc")
+    field(:current_price, source: "c", with: &Finnhub.Quote.enforce_float/1)
+    field(:change, source: "d", with: &Finnhub.Quote.enforce_float/1)
+    field(:percent_change, source: "dp", with: &Finnhub.Quote.enforce_float/1)
+    field(:high_price, source: "h", with: &Finnhub.Quote.enforce_float/1)
+    field(:low_price, source: "l", with: &Finnhub.Quote.enforce_float/1)
+    field(:open_price, source: "o", with: &Finnhub.Quote.enforce_float/1)
+    field(:previous_close_price, source: "pc", with: &Finnhub.Quote.enforce_float/1)
     field(:timestamp, source: "t")
   end
+
+  def enforce_float(integer) when is_integer(integer), do: integer / 1
+  def enforce_float(value), do: value
 end
