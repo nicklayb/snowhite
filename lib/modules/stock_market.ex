@@ -25,12 +25,24 @@ defmodule Snowhite.Modules.StockMarket do
         <%= for {_, %Symbol{symbol: symbol, value: value, change: change}} <- @prices do %>
           <div class="symbol symbol-<%= color(change) %>">
             <h1><%= symbol %></h1>
-            <h2 class="value"><%= Float.round(value, 2) %> </h2>
-            <h2 class="change"><%= Float.round(change, 2) %> </h2>
+            <h2 class="value"><%= format_money(value) %> </h2>
+            <h2 class="change"><%= format_money(change) %> </h2>
           </div>
         <% end %>
       </div>
     """
+  end
+
+  defp format_money(value) do
+    value
+    |> Float.round(2)
+    |> to_string()
+    |> pad_money()
+  end
+
+  defp pad_money(value) do
+    [integer, floating] = String.split(value, ".")
+    "#{integer}.#{String.pad_trailing(floating, 2, "0")}"
   end
 
   defp color(value) when value > 0, do: "positive"

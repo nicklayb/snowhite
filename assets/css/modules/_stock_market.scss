@@ -18,11 +18,19 @@ $symbol-padding: 0.4rem;
 
   h1 {
     font-weight: bold;
-    color: #FCFCFC
+    color: #FCFCFC;
+    font-size: 1.2em;
   }
 
   h1, h2 {
     margin-bottom: 0.3rem;
+  }
+
+  h2 {
+    color: white;
+    padding: 0.2rem 0.3rem;
+    font-weight: bold;
+    font-size: 1.1em;
   }
 
   h2.value::after {
@@ -34,14 +42,14 @@ $symbol-padding: 0.4rem;
   }
 
   .symbol.symbol-positive h2.change {
-    color: $positive-color;
+    background-color: $positive-color;
   }
 
   .symbol.symbol-negative h2.change {
-    color: $negative-color;
+    background-color: $negative-color;
   }
 
   .symbol.symbol-even h2.change {
-    color: $even-color;
+    background-color: $even-color;
   }
 }
