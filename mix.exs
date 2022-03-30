@@ -56,7 +56,7 @@ defmodule Snowhite.MixProject do
       {:sweet_xml, "~> 0.6.6"},
       {:eqrcode, "~> 0.1.7"},
       {:bitly, "~> 0.1"},
-      {:starchoice, "~> 0.2.0"},
+      {:starchoice, "~> 0.2"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
