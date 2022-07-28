@@ -3,7 +3,7 @@ defmodule Snowhite.MixProject do
 
   @github "https://github.com/nicklayb/snowhite"
   @description "Smart mirror framework"
-  @version "3.0.0"
+  @version "3.0.0-dev"
   def project do
     [
       app: :snowhite,
@@ -57,7 +57,9 @@ defmodule Snowhite.MixProject do
       {:eqrcode, "~> 0.1.7"},
       {:bitly, "~> 0.1"},
       {:starchoice, "~> 0.2"},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
+      {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev}
     ]
   end
 
@@ -164,7 +166,14 @@ defmodule Snowhite.MixProject do
 
   defp aliases do
     [
-      setup: ["deps.get", "cmd npm install --prefix assets"]
+      setup: ["deps.get"],
+      "assets.deploy": [
+        "esbuild default --minify",
+        "sass default --no-source-map --style=compressed",
+        "assets.copy",
+        "phx.digest"
+      ],
+      "assets.copy": ["cmd mix assets.copy"]
     ]
   end
 end

@@ -11,12 +11,19 @@ Application.put_env(:snowhite, SnowhiteDemo.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: [
-    node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch-stdin",
-      cd: "assets"
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    sass: {
+      DartSass,
+      :install_and_run,
+      [:default, ~w(--embed-source-map --source-map-urls=absolute --watch)]
+    },
+    npx: [
+      "cpx",
+      "./static/**/*",
+      "../priv/static",
+      "-v",
+      "--watch",
+      cd: Path.expand("./assets", __DIR__)
     ]
   ],
   live_reload: [
@@ -28,6 +35,21 @@ Application.put_env(:snowhite, SnowhiteDemo.Endpoint,
       ~r"lib/snowhite.ex"
     ]
   ]
+)
+
+Application.put_env(:esbuild, :version, "0.14.0")
+
+Application.put_env(:esbuild, :default,
+  args: ~w(js/app.js --bundle --target=es2016 --outdir=../priv/static/js),
+  cd: Path.expand("./assets", __DIR__),
+  env: %{"NODE_PATH" => Path.expand("./deps", __DIR__)}
+)
+
+Application.put_env(:dart_sass, :version, "1.49.11")
+
+Application.put_env(:dart_sass, :default,
+  args: ~w(css/app.scss ../priv/static/css/app.css),
+  cd: Path.expand("./assets", __DIR__)
 )
 
 defmodule Snowhite.Profiles.Default do
@@ -44,11 +66,13 @@ defmodule Snowhite.Profiles.Default do
     top_left: [
       Snowhite.Modules.Clock,
       Snowhite.Modules.Calendar,
-      {Snowhite.Modules.StockMarket, symbols: ["PENN", "MSFT", "AAPL"]},
+      {Snowhite.Modules.StockMarket, symbols: ["PENN", "MSFT", "VCN.TSX"]},
       {Snowhite.Modules.News,
        feeds: [
          {"L'Hebdo", "https://www.lhebdojournal.com/feed/rss2/"},
-         {"RC", "https://ici.radio-canada.ca/rss/4159"}
+         {"RC", "https://ici.radio-canada.ca/rss/4159"},
+         {"La Presse; Justice et faits divers",
+          "https://www.lapresse.ca/actualites/justice-et-faits-divers/rss"}
        ],
        persist_app: :snowhite}
     ],
