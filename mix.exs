@@ -3,7 +3,7 @@ defmodule Snowhite.MixProject do
 
   @github "https://github.com/nicklayb/snowhite"
   @description "Smart mirror framework"
-  @version "2.1.3"
+  @version "3.0.0"
   def project do
     [
       app: :snowhite,
@@ -43,13 +43,13 @@ defmodule Snowhite.MixProject do
 
   defp deps do
     [
-      {:phoenix, "~> 1.5.4"},
-      {:phoenix_live_view, "~> 0.13"},
+      {:phoenix, "~> 1.6.11"},
+      {:phoenix_live_view, "~> 0.17"},
       {:floki, ">= 0.0.0", only: :test},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_html, "~> 3.2"},
+      {:phoenix_live_reload, "~> 1.3", only: :dev},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0", only: :dev},
+      {:plug_cowboy, "~> 2.5", only: :dev},
       {:timex, "~> 3.6.2"},
       {:httpoison, "~> 1.7"},
       {:elixir_feed_parser, "~> 2.1.0"},
