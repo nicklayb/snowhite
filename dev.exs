@@ -40,27 +40,23 @@ defmodule Snowhite.Profiles.Default do
     timezone: "America/Toronto"
   )
 
-  register_module(:top_left, Snowhite.Modules.Clock)
-
-  register_module(:top_left, Snowhite.Modules.Calendar)
-
-  register_module(:top_left, Snowhite.Modules.StockMarket, symbols: ["PENN", "MSFT", "AAPL"])
-
-  register_module(:top_right, Snowhite.Modules.Weather.Current, refresh: ~d(4h))
-
-  register_module(:top_right, Snowhite.Modules.Weather.Forecast, refresh: ~d(4h), display: :inline)
-
-  register_module(:top_right, Snowhite.Modules.Suntime,
-    latitude: 43.653225,
-    longitude: -79.383186
-  )
-
-  register_module(:top_left, Snowhite.Modules.News,
-    feeds: [
-      {"L'Hebdo", "https://www.lhebdojournal.com/feed/rss2/"},
-      {"RC", "https://ici.radio-canada.ca/rss/4159"}
+  modules(
+    top_left: [
+      Snowhite.Modules.Clock,
+      Snowhite.Modules.Calendar,
+      {Snowhite.Modules.StockMarket, symbols: ["PENN", "MSFT", "AAPL"]},
+      {Snowhite.Modules.News,
+       feeds: [
+         {"L'Hebdo", "https://www.lhebdojournal.com/feed/rss2/"},
+         {"RC", "https://ici.radio-canada.ca/rss/4159"}
+       ],
+       persist_app: :snowhite}
     ],
-    persist_app: :snowhite
+    top_right: [
+      {Snowhite.Modules.Weather.Current, refresh: ~d(4h)},
+      {Snowhite.Modules.Weather.Forecast, refresh: ~d(4h), display: :inline},
+      {Snowhite.Modules.Suntime, latitude: 43.653225, longitude: -79.383186}
+    ]
   )
 end
 
@@ -74,9 +70,12 @@ defmodule Snowhite.Profiles.Simple do
     timezone: "America/Toronto"
   )
 
-  register_module(:top_left, Snowhite.Modules.Clock)
-
-  register_module(:top_left, Snowhite.Modules.Calendar)
+  modules(
+    top_left: [
+      Snowhite.Modules.Clock,
+      Snowhite.Modules.Calendar
+    ]
+  )
 end
 
 defmodule SnowhiteApp do

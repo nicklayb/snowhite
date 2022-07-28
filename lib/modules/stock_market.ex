@@ -20,10 +20,10 @@ defmodule Snowhite.Modules.StockMarket do
   end
 
   def render(assigns) do
-    ~L"""
+    ~H"""
       <div class="wrapper">
         <%= for {_, %Symbol{symbol: symbol, value: value, change: change}} <- @prices do %>
-          <div class="symbol symbol-<%= color(change) %>">
+          <div class={"symbol symbol-" <> color(change)}>
             <h1><%= symbol %></h1>
             <h2 class="value"><%= format_money(value) %> </h2>
             <h2 class="change"><%= format_money(change) %> </h2>
