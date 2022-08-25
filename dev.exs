@@ -11,12 +11,19 @@ Application.put_env(:snowhite, SnowhiteDemo.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: [
-    node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch-stdin",
-      cd: "assets"
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    sass: {
+      DartSass,
+      :install_and_run,
+      [:default, ~w(--embed-source-map --source-map-urls=absolute --watch)]
+    },
+    npx: [
+      "cpx",
+      "./static/**/*",
+      "../priv/static",
+      "-v",
+      "--watch",
+      cd: Path.expand("./assets", __DIR__)
     ]
   ],
   live_reload: [
@@ -30,6 +37,21 @@ Application.put_env(:snowhite, SnowhiteDemo.Endpoint,
   ]
 )
 
+Application.put_env(:esbuild, :version, "0.14.0")
+
+Application.put_env(:esbuild, :default,
+  args: ~w(js/app.js --bundle --target=es2016 --outdir=../priv/static/js),
+  cd: Path.expand("./assets", __DIR__),
+  env: %{"NODE_PATH" => Path.expand("./deps", __DIR__)}
+)
+
+Application.put_env(:dart_sass, :version, "1.49.11")
+
+Application.put_env(:dart_sass, :default,
+  args: ~w(css/app.scss ../priv/static/css/app.css),
+  cd: Path.expand("./assets", __DIR__)
+)
+
 defmodule Snowhite.Profiles.Default do
   use Snowhite.Builder.Profile
 
@@ -40,27 +62,25 @@ defmodule Snowhite.Profiles.Default do
     timezone: "America/Toronto"
   )
 
-  register_module(:top_left, Snowhite.Modules.Clock)
-
-  register_module(:top_left, Snowhite.Modules.Calendar)
-
-  register_module(:top_left, Snowhite.Modules.StockMarket, symbols: ["PENN", "MSFT", "AAPL"])
-
-  register_module(:top_right, Snowhite.Modules.Weather.Current, refresh: ~d(4h))
-
-  register_module(:top_right, Snowhite.Modules.Weather.Forecast, refresh: ~d(4h), display: :inline)
-
-  register_module(:top_right, Snowhite.Modules.Suntime,
-    latitude: 43.653225,
-    longitude: -79.383186
-  )
-
-  register_module(:top_left, Snowhite.Modules.News,
-    feeds: [
-      {"L'Hebdo", "https://www.lhebdojournal.com/feed/rss2/"},
-      {"RC", "https://ici.radio-canada.ca/rss/4159"}
+  modules(
+    top_left: [
+      Snowhite.Modules.Clock,
+      Snowhite.Modules.Calendar,
+      {Snowhite.Modules.StockMarket, symbols: ["PENN", "MSFT", "VCN.TSX"]},
+      {Snowhite.Modules.News,
+       feeds: [
+         {"L'Hebdo", "https://www.lhebdojournal.com/feed/rss2/"},
+         {"RC", "https://ici.radio-canada.ca/rss/4159"},
+         {"La Presse; Justice et faits divers",
+          "https://www.lapresse.ca/actualites/justice-et-faits-divers/rss"}
+       ],
+       persist_app: :snowhite}
     ],
-    persist_app: :snowhite
+    top_right: [
+      {Snowhite.Modules.Weather.Current, refresh: ~d(4h)},
+      {Snowhite.Modules.Weather.Forecast, refresh: ~d(4h), display: :inline},
+      {Snowhite.Modules.Suntime, latitude: 43.653225, longitude: -79.383186}
+    ]
   )
 end
 
@@ -74,9 +94,12 @@ defmodule Snowhite.Profiles.Simple do
     timezone: "America/Toronto"
   )
 
-  register_module(:top_left, Snowhite.Modules.Clock)
-
-  register_module(:top_left, Snowhite.Modules.Calendar)
+  modules(
+    top_left: [
+      Snowhite.Modules.Clock,
+      Snowhite.Modules.Calendar
+    ]
+  )
 end
 
 defmodule SnowhiteApp do

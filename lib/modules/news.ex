@@ -30,7 +30,7 @@ defmodule Snowhite.Modules.News do
     qr_code? = get_option(assigns, :qr_codes)
     locale = get_option(assigns, :locale)
 
-    ~L"""
+    ~H"""
       <ul class="feeds">
         <%= for {name, news} <- @news do %>
           <li>
@@ -40,7 +40,7 @@ defmodule Snowhite.Modules.News do
                 <li>
                   <%= if qr_code?, do: Phoenix.HTML.raw(render_qr_code(item)) %>
                   <div>
-                    <a href="<%= item.original_url %>"><%= item.title %></a>
+                    <a href={item.original_url}><%= item.title %></a>
                     <small><%= format_date(locale, item.date) %></small>
                   </div>
                 </li>

@@ -18,6 +18,31 @@ defmodule Snowhite.Builder.Profile do
     end
   end
 
+  defmacro modules(modules) do
+    Enum.flat_map(modules, fn {position, modules} ->
+      Enum.map(modules, fn module ->
+        {module, options} =
+          case module do
+            {module, options} -> {module, options}
+            module -> {module, []}
+          end
+
+        quote do
+          @layout Layout.put_module(
+                    @layout,
+                    unquote(position),
+                    {unquote(module),
+                     ensure_options(
+                       unquote(module).module_options,
+                       unquote(options),
+                       @global_options
+                     )}
+                  )
+        end
+      end)
+    end)
+  end
+
   defmacro __using__(_) do
     quote do
       import Snowhite.Builder.Profile
@@ -30,7 +55,7 @@ defmodule Snowhite.Builder.Profile do
 
   defmacro configure(options) do
     quote do
-      @global_options unquote(options)
+      @global_options @global_options ++ unquote(options)
     end
   end
 

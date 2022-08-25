@@ -49,8 +49,12 @@ defmodule MyMirror.Profiles.Default do
     locale: "fr"
   )
 
-  register_module(:top_left, Snowhite.Modules.Clock) # will be french
-  register_module(:top_left, Snowhite.Modules.Clock, locale: "en") # will be english
+  modules(
+    top_left: [
+      Snowhite.Modules.Clock, # will be french
+      {Snowhite.Modules.Clock, locale: "en"}, # will be english
+    ]
+  )
 end
 ```
 
@@ -107,7 +111,7 @@ defmodule Snowhite.Modules.HelloWorld do
   use Snowhite.Builder.Module
 
   def render(assigns) do
-    ~L"""
+    ~H"""
       <h1>Hello world.</h1>
     """
   end
@@ -127,7 +131,7 @@ defmodule Snowhite.Modules.HelloWorld do
   end
 
   def render(assigns) do
-    ~L"""
+    ~H"""
       <h1>@message</h1>
     """
   end
@@ -159,7 +163,7 @@ You can then pass in options like below
 defmodule MyMirror.Profiles.Default do
   use Snowhite.Builder.Profile
 
-  register_module(:top_left, Snowhite.Modules.HelloWorld, message: "Hello, punk.")
+  modules(top_left: [{Snowhite.Modules.HelloWorld, message: "Hello, punk."}])
 end
 ```
 
@@ -177,7 +181,7 @@ defmodule Snowhite.Modules.HelloWorld do
   end
 
   def render(%{options: %{color: color, message: message}} = assigns) do
-    ~L"""
+    ~H"""
       <h1 style="color: <%= color %>"><%= message %></h1>
     """
   end
@@ -205,7 +209,7 @@ end
 defmodule MyMirror.Profiles.Default do
   use Snowhite.Builder.Profile
 
-  register_module(:top_left, Snowhite.Modules.HelloWorld, message: "Hello, punk.", locale: "fr")
+  modules(top_left: [{Snowhite.Modules.HelloWorld, message: "Hello, punk.", locale: "fr"}])
 end
 ```
 

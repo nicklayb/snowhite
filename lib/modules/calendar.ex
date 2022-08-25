@@ -27,7 +27,7 @@ defmodule Snowhite.Modules.Calendar do
   def render(assigns) do
     weekdays = @weekdays
 
-    ~L"""
+    ~H"""
       <div>
         <table>
           <thead>
@@ -43,7 +43,7 @@ defmodule Snowhite.Modules.Calendar do
             <%= for week <- @calendar do %>
               <tr>
                 <%= for day <- week do %>
-                <td class="<%= cell_classes(@current_date, day) %>">
+                <td class={cell_classes(@current_date, day)}>
                   <%= day.day %>
                 </td>
                 <% end %>
