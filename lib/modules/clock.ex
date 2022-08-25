@@ -23,7 +23,7 @@ defmodule Snowhite.Modules.Clock do
     locale = get_option(assigns, :locale)
 
     ~L"""
-      <div>
+      <div phx-hook="SnowhiteClock">
         <h1><%= Timex.lformat!(@current_date, time_format, locale) %></h1>
         <h2><%= Timex.lformat!(@current_date, date_format, locale) %></h2>
       </div>

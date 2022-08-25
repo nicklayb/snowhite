@@ -57,7 +57,9 @@ defmodule Snowhite.MixProject do
       {:eqrcode, "~> 0.1.7"},
       {:bitly, "~> 0.1"},
       {:starchoice, "~> 0.2.0"},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
+      {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev}
     ]
   end
 
@@ -164,7 +166,8 @@ defmodule Snowhite.MixProject do
 
   defp aliases do
     [
-      setup: ["deps.get", "cmd npm install --prefix assets"]
+      setup: ["deps.get", "cmd npm install --prefix assets"],
+      "assets.build": ["esbuild module", "esbuild cdn", "esbuild main"]
     ]
   end
 end
