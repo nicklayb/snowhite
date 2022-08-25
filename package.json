@@ -1,0 +1,17 @@
+{
+  "name": "snowhite",
+  "version": "0.1.0",
+  "license": "MIT",
+  "module": "./priv/js/snowhite.mjs",
+  "main": "./priv/js/snowhite.cjs.js",
+  "exports": {
+    "import": "./priv/js/snowhite.mjs",
+    "require": "./priv/js/snowhite.cjs.js"
+  },
+  "files": [
+    "README.md",
+    "package.json",
+    "priv/js/*",
+    "assets/js/phoenix/*"
+  ]
+}

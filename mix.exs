@@ -10,7 +10,7 @@ defmodule Snowhite.MixProject do
       version: @version,
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix | Mix.compilers()],
       source_url: @github,
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),

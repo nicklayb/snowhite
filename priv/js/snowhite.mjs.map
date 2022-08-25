@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../assets/js/snowhite/hooks/index.js", "../../assets/js/snowhite/hooks/Clock.js", "../../assets/js/snowhite/index.js"],
+  "sourcesContent": ["import SnowhiteClock from './Clock'\n\nexport {\n  SnowhiteClock\n}\n", "const Clock = {\n  mounted() {\n\n  }\n}\n\nexport default Clock\n", "import * as Hooks from './hooks'\n\nexport const withHooks = (hooks) => ({\n  ...Hooks,\n  ...hooks,\n})\n\nexport { Hooks }\n"],
+  "mappings": ";;;;;;;;;AAAA;AAAA;AAAA;AAAA;;;ACAA,IAAM,QAAQ;AAAA,EACZ,UAAU;AAAA;AAAA;AAKZ,IAAO,gBAAQ;;;ACJR,IAAM,YAAY,CAAC,UAAW;AAAA,KAChC;AAAA,KACA;AAAA;",
+  "names": []
+}

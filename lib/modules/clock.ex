@@ -21,14 +21,17 @@ defmodule Snowhite.Modules.Clock do
     date_format = get_option(assigns, :date_format)
 
     locale = get_option(assigns, :locale)
+    timezone = get_option(assigns, :timezone)
 
     ~H"""
-      <div phx-hook="SnowhiteClock">
+      <div id={id(locale, timezone)} phx-hook="SnowhiteClock">
         <h1><%= Timex.lformat!(@current_date, time_format, locale) %></h1>
         <h2><%= Timex.lformat!(@current_date, date_format, locale) %></h2>
       </div>
     """
   end
+
+  defp id(locale, timezone), do: Enum.join([locale, timezone], "-")
 
   def handle_info(:updated, socket) do
     {:noreply, set_current_date(socket)}
