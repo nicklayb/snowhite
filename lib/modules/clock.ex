@@ -4,7 +4,12 @@ defmodule Snowhite.Modules.Clock do
   alias __MODULE__
 
   def mount(socket) do
-    {:ok, set_current_date(socket)}
+    socket =
+      socket
+      |> assign(:current_date, nil)
+      |> set_current_date()
+
+    {:ok, socket}
   end
 
   def module_options do
@@ -25,7 +30,7 @@ defmodule Snowhite.Modules.Clock do
 
     ~H"""
       <div id={id(locale, timezone)} phx-hook="SnowhiteClock">
-        <h1><%= Timex.lformat!(@current_date, time_format, locale) %></h1>
+        <h1 class="time"><%= Timex.lformat!(@current_date, time_format, locale) %></h1>
         <h2><%= Timex.lformat!(@current_date, date_format, locale) %></h2>
       </div>
     """
@@ -37,8 +42,20 @@ defmodule Snowhite.Modules.Clock do
     {:noreply, set_current_date(socket)}
   end
 
-  defp set_current_date(socket) do
-    assign(socket, :current_date, Clock.Server.now())
+  defp set_current_date(%{assigns: assigns} = socket) do
+    now = Clock.Server.now()
+
+    if send_sync?(Map.get(assigns, :current_date, Timex.now()), now) do
+      assign(socket, :current_date, now)
+    else
+      socket
+    end
+  end
+
+  defp send_sync?(nil, _now), do: true
+
+  defp send_sync?(assigned, now) do
+    abs(Timex.diff(assigned, now, :hours)) >= 1
   end
 
   def applications(options) do
