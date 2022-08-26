@@ -5,7 +5,7 @@ const padPart = part => part.toString().padStart(2, "0")
 const getDate = () => {
   const date = new Date()
 
-  return [date.getHours(), padPart(date.getMinutes()), padPart(date.getSeconds())].join(":")
+  return [date.getHours(), date.getMinutes(), date.getSeconds()].map(padPart).join(":")
 }
 
 const Clock = {
