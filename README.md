@@ -256,3 +256,5 @@ Start the dev server using `make dev`
 - [] Improve documentations
 - [] Write guides
 - [] Support multiple application names so we can have two clock with different city, for instance.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D2YX9OU)
