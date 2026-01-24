@@ -1,7 +1,17 @@
 {
-  "devDependencies": {
+  "repository": {},
+  "description": " ",
+  "license": "MIT",
+  "scripts": {
+    "copy-static": "cpx \"./static/**/*\" ../priv/static -v"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.1",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "phoenix_live_view": "file:../deps/phoenix_live_view"
+  },
+  "devDependencies": {
+    "cpx": "^1.5.0"
   }
 }

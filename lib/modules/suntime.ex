@@ -58,12 +58,12 @@ defmodule Snowhite.Modules.Suntime do
     sunrise_icon = @sunrise_icon
     sunset_icon = @sunset_icon
 
-    ~L"""
+    ~H"""
       <div>
         <ul>
           <%= for %{date: date, sunrise: sunrise, sunset: sunset} <- @days do %>
           <li>
-            <h2><%= format_date(date, assigns) %></h2/>
+            <h2><%= format_date(date, assigns) %></h2>
             <div class="times">
               <div class="sunrise">
                 <%= Phoenix.HTML.raw(sunrise_icon) %>

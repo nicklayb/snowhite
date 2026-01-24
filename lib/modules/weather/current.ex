@@ -20,10 +20,10 @@ defmodule Snowhite.Modules.Weather.Current do
   def render(assigns) do
     units = get_option(assigns, :units, @fallback_units)
 
-    ~L"""
-      <img src="<%= @icon_url %>">
+    ~H"""
+      <img src={@icon_url}>
       <div>
-        <h1 class="temperature <%= units %>"><%= round(@temperature) %></h1>
+        <h1 class={"temperature" <> to_string(units)}><%= round(@temperature) %></h1>
         <h3><%= @name %></h3>
       </div>
     """

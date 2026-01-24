@@ -3,14 +3,14 @@ defmodule Snowhite.MixProject do
 
   @github "https://github.com/nicklayb/snowhite"
   @description "Smart mirror framework"
-  @version "2.2.0"
+  @version String.trim(File.read!("./VERSION"))
   def project do
     [
       app: :snowhite,
       version: @version,
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix] ++ Mix.compilers(),
+      compilers: [:phoenix | Mix.compilers()],
       source_url: @github,
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -50,11 +50,11 @@ defmodule Snowhite.MixProject do
       {:floki, ">= 0.0.0", only: :test},
       {:httpoison, "~> 2.3.0"},
       {:jason, "~> 1.0"},
-      {:phoenix, "~> 1.5.4"},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.13"},
-      {:plug_cowboy, "~> 2.0", only: :dev},
+      {:phoenix, "~> 1.6.11"},
+      {:phoenix_html, "~> 3.2"},
+      {:phoenix_live_reload, "~> 1.3", only: :dev},
+      {:phoenix_live_view, "~> 0.17"},
+      {:plug_cowboy, "~> 2.5", only: :dev},
       {:starchoice, "~> 0.2"},
       {:sweet_xml, "~> 0.6.6"},
       {:timex, "~> 3.7.13"}
@@ -164,7 +164,15 @@ defmodule Snowhite.MixProject do
 
   defp aliases do
     [
-      setup: ["deps.get", "cmd npm install --prefix assets"]
+      setup: ["deps.get"],
+      "assets.build": ["esbuild module", "esbuild cdn", "esbuild main"],
+      "assets.deploy": [
+        "esbuild default --minify",
+        "sass default --no-source-map --style=compressed",
+        "assets.copy",
+        "phx.digest"
+      ],
+      "assets.copy": ["cmd mix assets.copy"]
     ]
   end
 end

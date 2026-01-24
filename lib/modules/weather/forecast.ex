@@ -20,13 +20,13 @@ defmodule Snowhite.Modules.Weather.Forecast do
     units = get_option(assigns, :units)
     locale = get_option(assigns, :locale)
 
-    ~L"""
+    ~H"""
       <table class="forecasts topdown">
         <tbody>
         <%= for %{dt: dt, main: main, weather: [weather | _]} <- @forecasts do %>
           <tr>
-            <td><img src="<%= WeatherItem.icon_url(weather, "") %>"></td>
-            <td><h2 class="temperature <%= units %>"><%= round(main.temp) %></h2></td>
+            <td><img src={WeatherItem.icon_url(weather, "")}></td>
+            <td><h2 class={"temperature " <>  to_string(units)}><%= round(main.temp) %></h2></td>
             <td><h3><%= day_name(dt, locale) %></h3></td>
           </tr>
         <% end %>
@@ -39,12 +39,12 @@ defmodule Snowhite.Modules.Weather.Forecast do
     units = get_option(assigns, :units)
     locale = get_option(assigns, :locale)
 
-    ~L"""
+    ~H"""
       <div class="forecasts inline">
         <%= for %{dt: dt, main: main, weather: [weather | _]} <- @forecasts do %>
           <div class="forecast-item">
-            <div><img src="<%= WeatherItem.icon_url(weather, "") %>"></div>
-            <div><h2 class="temperature <%= units %>"><%= round(main.temp) %></h2></div>
+            <div><img src={WeatherItem.icon_url(weather, "")}></div>
+            <div><h2 class={"temperature " <> to_string(units)}><%= round(main.temp) %></h2></div>
             <div><h3><%= String.at(day_name(dt, locale), 0) %></h3></div>
           </div>
         <% end %>
