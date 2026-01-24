@@ -48,7 +48,7 @@ defmodule OpenWeather do
         Logger.info("[#{inspect(__MODULE__)}] [#{status}] #{url}")
 
       {:error, error} ->
-        Logger.warn("[#{inspect(__MODULE__)}] failed: #{error}")
+        Logger.warning("[#{inspect(__MODULE__)}] failed: #{error}")
     end
 
     result

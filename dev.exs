@@ -11,12 +11,18 @@ Application.put_env(:snowhite, SnowhiteDemo.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: [
-    node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch-stdin",
-      cd: "assets"
+    esbuild: [
+      "js/app.js",
+      "--bundle",
+      "--target=es2016",
+      "--outdir=../priv/static/js/",
+      cd: Path.expand("./assets", __DIR__),
+      env: [{"NODE_PATH", Path.expand("./deps", __DIR__)}]
+    ],
+    "dart-sass": [
+      "assets/css/app.scss",
+      "priv/static/css/app.css",
+      "--watch"
     ]
   ],
   live_reload: [
@@ -48,7 +54,10 @@ defmodule Snowhite.Profiles.Default do
 
   register_module(:top_right, Snowhite.Modules.Weather.Current, refresh: ~d(4h))
 
-  register_module(:top_right, Snowhite.Modules.Weather.Forecast, refresh: ~d(4h), display: :inline)
+  register_module(:top_right, Snowhite.Modules.Weather.Forecast,
+    refresh: ~d(4h),
+    display: :inline
+  )
 
   register_module(:top_right, Snowhite.Modules.Suntime,
     latitude: 43.653225,
@@ -134,6 +143,7 @@ Application.put_env(:phoenix, :serve_endpoints, true)
 Application.put_env(:phoenix, :json_library, Jason)
 Application.put_env(:bitly, :access_token, System.get_env("BITLY_TOKEN"))
 Application.put_env(:snowhite, Finnhub, api_key: System.get_env("FINNHUB_API_KEY"))
+Application.put_env(:snowhite, Snowhite.UrlShortener, url_shortener: Snowhite.UrlShortener.Noop)
 
 Task.start(fn ->
   children = [

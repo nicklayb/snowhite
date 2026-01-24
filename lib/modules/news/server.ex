@@ -73,6 +73,7 @@ defmodule Snowhite.Modules.News.Server do
         |> shorten_url(state)
         |> put_qr_code(state)
       end)
+      |> Enum.sort_by(& &1.date, {:desc, DateTime})
 
     {name, news}
   end

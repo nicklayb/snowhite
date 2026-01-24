@@ -34,3 +34,5 @@ npm-debug.log
 /priv/static/
 /priv/dets/short_urls.dets
 /**/*/.DS_Store
+.nix-mix
+.nix-hex

@@ -59,7 +59,7 @@ defmodule Snowhite.UrlShortener do
       {:ok, short_url}
     else
       {:error, data} ->
-        Logger.warn("[#{inspect(__MODULE__)}] error: #{inspect(data)}")
+        Logger.warning("[#{inspect(__MODULE__)}] error: #{inspect(data)}")
         {:error, data}
     end
   end

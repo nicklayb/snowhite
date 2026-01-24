@@ -3,14 +3,14 @@ defmodule Snowhite.MixProject do
 
   @github "https://github.com/nicklayb/snowhite"
   @description "Smart mirror framework"
-  @version "2.1.3"
+  @version "2.2.0"
   def project do
     [
       app: :snowhite,
       version: @version,
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix] ++ Mix.compilers(),
       source_url: @github,
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -43,21 +43,21 @@ defmodule Snowhite.MixProject do
 
   defp deps do
     [
-      {:phoenix, "~> 1.5.4"},
-      {:phoenix_live_view, "~> 0.13"},
+      {:bitly, "~> 0.1"},
+      {:eqrcode, "~> 0.1.7"},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:fast_rss, "~> 0.5.0"},
       {:floki, ">= 0.0.0", only: :test},
+      {:httpoison, "~> 2.3.0"},
+      {:jason, "~> 1.0"},
+      {:phoenix, "~> 1.5.4"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:jason, "~> 1.0"},
+      {:phoenix_live_view, "~> 0.13"},
       {:plug_cowboy, "~> 2.0", only: :dev},
-      {:timex, "~> 3.6.2"},
-      {:httpoison, "~> 1.7"},
-      {:elixir_feed_parser, "~> 2.1.0"},
-      {:sweet_xml, "~> 0.6.6"},
-      {:eqrcode, "~> 0.1.7"},
-      {:bitly, "~> 0.1"},
       {:starchoice, "~> 0.2"},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:sweet_xml, "~> 0.6.6"},
+      {:timex, "~> 3.7.13"}
     ]
   end
 

@@ -20,10 +20,12 @@ defmodule Rss.Poller do
 
   def poll(feed) when is_bitstring(feed) do
     with {:ok, %{status_code: 200, body: body}} <- call(feed),
-         {:ok, feed} <- ElixirFeedParser.parse(body) do
-      {:ok, feed}
+         {:ok, results} <- FastRSS.parse_rss(body) do
+      items = Map.get(results, "items")
+      {:ok, items}
     else
       {:ok, %{status_code: status}} -> {:error, status}
+      {:ok, _} -> {:error, :malformed_body}
       err -> err
     end
   end
@@ -36,7 +38,7 @@ defmodule Rss.Poller do
         Logger.info("[#{inspect(__MODULE__)}] [#{status}] #{feed}")
 
       error ->
-        Logger.warn("[#{inspect(__MODULE__)}] [#{inspect(error)}] #{feed}")
+        Logger.warning("[#{inspect(__MODULE__)}] [#{inspect(error)}] #{feed}")
     end
 
     result

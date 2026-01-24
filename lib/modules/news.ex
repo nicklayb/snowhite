@@ -3,7 +3,7 @@ defmodule Snowhite.Modules.News do
 
   alias __MODULE__
 
-  every(~d(25s), :scroll, &scroll/1)
+  every(~d(5s), :scroll, &scroll/1)
 
   def mount(socket) do
     socket =

@@ -21,7 +21,7 @@ defmodule SunriseSunset do
         Logger.info("[#{inspect(__MODULE__)}] [#{status}] #{url}")
 
       {:error, error} ->
-        Logger.warn("[#{inspect(__MODULE__)}] failed: #{inspect(error)}")
+        Logger.warning("[#{inspect(__MODULE__)}] failed: #{inspect(error)}")
     end
 
     result

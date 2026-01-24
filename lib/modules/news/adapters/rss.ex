@@ -15,23 +15,27 @@ defmodule Snowhite.Modules.News.Adapters.Rss do
   alias Snowhite.Modules.News.Item
 
   def fetch(url, _) do
-    with {:ok, %{entries: entries}} <- Rss.Poller.poll(url) do
-      ListHelper.filter_map(entries, &valid?/1, &to_rss_item/1)
+    with {:ok, result} <- Rss.Poller.poll(url) do
+      ListHelper.filter_map(result, &valid?/1, &to_rss_item/1)
     else
       _ -> []
     end
   end
 
-  defp to_rss_item(%{id: id} = entry) do
+  defp to_rss_item(entry) do
     %Item{
-      id: id,
-      original_url: Map.get(entry, :"rss2:link"),
-      date: Map.get(entry, :updated),
-      title: String.trim(Map.get(entry, :title, ""))
+      id: Map.get(entry, "link"),
+      original_url: Map.get(entry, "link"),
+      date: parse_date(Map.get(entry, "pub_date")),
+      title: String.trim(Map.get(entry, "title", ""))
     }
   end
 
-  @required_fields [:id, :title, :"rss2:link", :updated]
+  defp parse_date(date) do
+    Timex.parse!(date, "{RFC1123}")
+  end
+
+  @required_fields ["link", "pub_date", "title"]
   defp valid?(item) do
     Enum.all?(@required_fields, fn field ->
       not (item
