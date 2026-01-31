@@ -28,6 +28,7 @@
             nodejs_22
             esbuild
             dart-sass
+            beamMinimal28Packages.elixir-ls
           ];
 
           shellHook = ''
