@@ -4,10 +4,10 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
   outputs =
-    {
-      self,
-      nixpkgs,
-      flake-utils,
+    { self
+    , nixpkgs
+    , flake-utils
+    ,
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
@@ -15,6 +15,7 @@
         pkgs = import nixpkgs {
           inherit system;
         };
+        envSepcific = pgks: if pkgs.stdenv.isLinux then [ pkgs.inotify-tools ] else [ ];
       in
       {
         devShells.default = pkgs.mkShell {
@@ -22,14 +23,13 @@
             elixir
             erlang_28
             direnv
-            inotify-tools
             just
             gnumake
             nodejs_22
             esbuild
             dart-sass
             beamMinimal28Packages.elixir-ls
-          ];
+          ] ++ envSepcific pkgs;
 
           shellHook = ''
             export MIX_HOME=$PWD/.nix-mix
