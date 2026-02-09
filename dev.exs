@@ -23,6 +23,7 @@ Application.put_env(:snowhite, SnowhiteDemo.Endpoint,
       "assets/css/app.scss",
       "priv/static/css/app.css",
       "--watch"
+    ],
     npx: [
       "cpx",
       "./static/**/*",
@@ -147,7 +148,11 @@ end
 Application.put_env(:phoenix, :serve_endpoints, true)
 Application.put_env(:phoenix, :json_library, Jason)
 Application.put_env(:bitly, :access_token, System.get_env("BITLY_TOKEN"))
-Application.put_env(:snowhite, Finnhub, api_key: System.get_env("FINNHUB_API_KEY"))
+
+Application.put_env(:snowhite, Snowhite.Client.Finnhub,
+  api_key: System.get_env("FINNHUB_API_KEY")
+)
+
 Application.put_env(:snowhite, Snowhite.UrlShortener, url_shortener: Snowhite.UrlShortener.Noop)
 
 Task.start(fn ->

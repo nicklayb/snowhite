@@ -1,4 +1,4 @@
-defmodule Snowhite.Helpers.CasingTest do
+defmodule Snowhite.Helpers.CalendarBuilderTest do
   use Snowhite.TestCase
 
   alias Snowhite.Helpers.CalendarBuilder

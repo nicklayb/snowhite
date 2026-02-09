@@ -130,19 +130,19 @@ defmodule Snowhite.MixProject do
         Snowhite.Helpers.Timing
       ],
       Clients: [
-        Finnhub,
-        Finnhub.Quote,
-        OpenWeather,
-        OpenWeather.Coord,
-        OpenWeather.Forecast,
-        OpenWeather.Forecast.City,
-        OpenWeather.Forecast.ForecastItem,
-        OpenWeather.Forecast.Temp,
-        OpenWeather.Weather,
-        OpenWeather.Weather.Main,
-        OpenWeather.Weather.WeatherItem,
-        SunriseSunset,
-        SunriseSunset.Response
+        Snowhite.Client.Finnhub,
+        Snowhite.Client.Finnhub.Quote,
+        Snowhite.Client.OpenWeather,
+        Snowhite.Client.OpenWeather.Coord,
+        Snowhite.Client.OpenWeather.Forecast,
+        Snowhite.Client.OpenWeather.Forecast.City,
+        Snowhite.Client.OpenWeather.Forecast.ForecastItem,
+        Snowhite.Client.OpenWeather.Forecast.Temp,
+        Snowhite.Client.OpenWeather.Weather,
+        Snowhite.Client.OpenWeather.Weather.Main,
+        Snowhite.Client.OpenWeather.Weather.WeatherItem,
+        Snowhite.Client.SunriseSunset,
+        Snowhite.Client.SunriseSunset.Response
       ],
       Builder: [
         Snowhite,

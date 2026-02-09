@@ -1,6 +1,8 @@
 defmodule SnowhiteWeb.Layouts.View do
   use SnowhiteWeb, {:view, path: "layouts/templates"}
 
+  import Phoenix.Component
+
   @doc """
   Gets the route helpers from the conn's router. As this view will be fired from another application and Snowhite doesn't include any endpoint nor default router. It fetches the router from the conn.
   """

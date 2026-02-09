@@ -97,7 +97,7 @@ defmodule Snowhite.Builder.Module do
   **Note**: It is not required to have the config put in the assign, this is just an example on how to use the config/1 function.
   """
   alias Snowhite.Helpers.Casing
-  import Phoenix.LiveView
+  import Phoenix.Component
 
   @doc """
   The builder macro supports the following options
@@ -263,5 +263,26 @@ defmodule Snowhite.Builder.Module do
   @spec broadcast(String.t(), any) :: :ok | {:error, any}
   def broadcast(topic, event) do
     Phoenix.PubSub.broadcast(Snowhite.PubSub, topic, event)
+  end
+
+  @doc "Pulls option from @options assign into assigns directly"
+  @spec pull_option(map(), atom()) :: map()
+  def pull_option(assigns, key, default \\ :__unset__)
+
+  def pull_option(assigns, key, :__unset__) do
+    assign(assigns, key, Keyword.fetch!(assigns.options, key))
+  end
+
+  def pull_option(assigns, key, other) do
+    assign(assigns, key, Keyword.get(assigns.options, key, other))
+  end
+
+  @doc "Pulls multiple options from options assign"
+  @spec pull_options(map(), [atom() | {atom(), any()}]) :: map()
+  def pull_options(assigns, keys) do
+    Enum.reduce(keys, assigns, fn
+      {key, fallback}, assigns -> pull_option(assigns, key, fallback)
+      key, assigns -> pull_option(assigns, key)
+    end)
   end
 end
