@@ -4,53 +4,33 @@ defmodule Snowhite.Modules.Clock.Server do
 
   It ticks every seconds and updates itself
   """
-  use GenServer
-  import Snowhite.Helpers.Timing
-  require Logger
+  use Snowhite.StateServer, pubsub_topic: "snowhite:modules:clock"
 
-  @auto_sync_timer ~d(1s)
+  alias Snowhite.StateServer.Configuration
   @fallback_timezone "UTC"
 
-  def start_link(args) do
-    GenServer.start_link(__MODULE__, args, name: __MODULE__)
-  end
-
-  def now do
-    GenServer.call(__MODULE__, :now)
-  end
-
-  def date do
-    __MODULE__
-    |> GenServer.call(:now)
-    |> Timex.to_date()
-  end
-
-  def init(options) do
-    Logger.info("[#{inspect(__MODULE__)}] Started (#{inspect(options)})")
-    Process.send_after(self(), :auto_sync, @auto_sync_timer)
+  @impl Snowhite.StateServer
+  def init_state(options) do
     {:ok, update(%{options: options, time: nil})}
   end
 
-  def handle_cast(:update, state) do
-    send(self(), :notify)
-    {:noreply, update(state)}
+  @update_timer :timer.seconds(1)
+  @impl Snowhite.StateServer
+  def init_configuration(options) do
+    %Configuration{update_timer: @update_timer, options: options}
   end
 
-  def handle_call(:now, _, %{time: time} = state) do
-    {:reply, time, state}
+  @impl Snowhite.StateServer
+  def handle_update(state, _configuration) do
+    {:ok, update(state)}
   end
 
-  def handle_info(:auto_sync, state) do
-    state = update(state)
-    Process.send_after(self(), :auto_sync, @auto_sync_timer)
-    send(self(), :notify)
-    {:noreply, state}
+  @impl Snowhite.StateServer
+  def handle_state_call(%{time: time}, _configuration) do
+    %{time: time, date: Timex.to_date(time)}
   end
 
-  def handle_info(:notify, state) do
-    Phoenix.PubSub.broadcast!(Snowhite.PubSub, "snowhite:modules:clock", :updated)
-    {:noreply, state}
-  end
+  def to_date(%{time: time}), do: Timex.to_date(time)
 
   defp update(%{options: options} = state) do
     time = now(options)

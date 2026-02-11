@@ -6,11 +6,7 @@ defmodule Snowhite.Modules.News do
   every(~d(5s), :scroll, &scroll/1)
 
   def mount(socket) do
-    socket =
-      socket
-      |> assign(:news, [])
-
-    send(self(), :updated)
+    socket = update(socket, News.Server.state())
 
     {:ok, socket}
   end
@@ -64,13 +60,11 @@ defmodule Snowhite.Modules.News do
     assign(socket, :news, news)
   end
 
-  def handle_info(:updated, socket) do
-    {:noreply, update(socket)}
+  def handle_info({:updated, news}, socket) do
+    {:noreply, update(socket, news)}
   end
 
-  defp update(socket) do
-    news = News.Server.news()
-
+  defp update(socket, news) do
     assign(socket, :news, news)
   end
 

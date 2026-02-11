@@ -7,7 +7,7 @@ defmodule Snowhite.Modules.Clock do
     socket =
       socket
       |> assign(:current_date, nil)
-      |> set_current_date()
+      |> set_current_date(Clock.Server.state())
 
     {:ok, socket}
   end
@@ -34,13 +34,11 @@ defmodule Snowhite.Modules.Clock do
 
   defp id(locale, timezone), do: Enum.join([locale, timezone], "-")
 
-  def handle_info(:updated, socket) do
-    {:noreply, set_current_date(socket)}
+  def handle_info({:updated, state}, socket) do
+    {:noreply, set_current_date(socket, state)}
   end
 
-  defp set_current_date(%{assigns: assigns} = socket) do
-    now = Clock.Server.now()
-
+  defp set_current_date(%{assigns: assigns} = socket, %{time: now}) do
     if send_sync?(Map.get(assigns, :current_date, Timex.now()), now) do
       assign(socket, :current_date, now)
     else

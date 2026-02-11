@@ -1,67 +1,44 @@
 defmodule Snowhite.Modules.News.Server do
-  use GenServer
+  use Snowhite.StateServer, pubsub_topic: "snowhite:modules:news"
 
+  alias Snowhite.StateServer.Configuration
   alias Snowhite.Modules.News.Item
   alias Snowhite.Modules.News.Feed
   alias Snowhite.UrlShortener
-  import Snowhite.Helpers.Timing
-  require Logger
 
-  @auto_sync_timer ~d(15m)
-
-  @spec start_link(any) :: GenServer.on_start()
-  def start_link(args) do
-    GenServer.start_link(__MODULE__, args, name: __MODULE__)
-  end
-
-  @doc "Updates the news feed"
-  @spec update() :: :ok
-  def update do
-    GenServer.cast(__MODULE__, :update)
-  end
-
-  @doc "Gets server's news feeds"
-  @spec news() :: [{String.t(), [Item.t()]}]
-  def news do
-    GenServer.call(__MODULE__, :news)
-  end
-
-  @impl GenServer
-  def init(options) do
+  @impl Snowhite.StateServer
+  def init_state(options) do
     {feeds, options} = Keyword.pop!(options, :feeds)
-    Logger.info("[#{inspect(__MODULE__)}] Started with #{length(feeds)} feeds")
-    send(self(), :auto_sync)
-    {:ok, %{options: options, feeds: init_feeds(feeds), news: []}}
+
+    feeds = Enum.map(feeds, &Feed.new/1)
+    news = Enum.map(feeds, fn %Feed{name: name} -> {name, []} end)
+
+    state = %{feeds: feeds, options: options, news: news}
+
+    {:ok, state}
   end
 
-  @impl GenServer
-  def handle_cast(:update, state) do
-    send(self(), :notify)
-    {:noreply, update(state)}
+  @refresh_default_timer :timer.minutes(15)
+  @impl Snowhite.StateServer
+  def init_configuration(options) do
+    %Configuration{update_timer: Keyword.get(options, :refresh, @refresh_default_timer)}
   end
 
-  @impl GenServer
-  def handle_call(:news, _, %{news: news} = state) do
-    {:reply, news, state}
+  @impl Snowhite.StateServer
+  def handle_update(%{feeds: feeds} = state, _configuration) do
+    async(state, :fetch_news, fn state -> Enum.map(feeds, &map_item(&1, state)) end)
+
+    :ignore
   end
 
-  @impl GenServer
-  def handle_info(:auto_sync, %{options: options} = state) do
-    state = update(state)
-    update_later(options)
-    send(self(), :notify)
-    {:noreply, state}
+  @impl Snowhite.StateServer
+  def handle_async(:fetch_news, _ref, news, state, _configuration) do
+    {:ok, %{state | news: news}}
   end
 
-  def handle_info(:notify, state) do
-    Phoenix.PubSub.broadcast!(Snowhite.PubSub, "snowhite:modules:news", :updated)
-    {:noreply, state}
-  end
-
-  defp update(%{feeds: feeds} = state) do
-    news = Enum.map(feeds, &map_item(&1, state))
-
-    %{state | news: news}
+  @impl Snowhite.StateServer
+  def handle_state_call(%{news: news}, _configuration) do
+    news
   end
 
   defp map_item(%Feed{name: name} = feed, state) do
@@ -99,11 +76,5 @@ defmodule Snowhite.Modules.News.Server do
     end
   end
 
-  defp update_later(options) do
-    Process.send_after(self(), :auto_sync, Keyword.get(options, :refresh, @auto_sync_timer))
-  end
-
-  defp init_feeds(feeds) do
-    Enum.map(feeds, &Feed.new/1)
-  end
+  def news(%{news: news}), do: news
 end

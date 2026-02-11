@@ -5,7 +5,7 @@ defmodule Snowhite.Modules.Calendar do
   alias Snowhite.Helpers.CalendarBuilder
 
   def mount(socket) do
-    {:ok, set_current_date(socket)}
+    {:ok, set_current_date(socket, Clock.Server.state())}
   end
 
   def module_options do
@@ -80,13 +80,12 @@ defmodule Snowhite.Modules.Calendar do
 
   defp other_month?(%{month: current_month}, %{month: month}), do: month != current_month
 
-  def handle_info(:updated, socket) do
-    {:noreply, set_current_date(socket)}
+  def handle_info({:updated, state}, socket) do
+    {:noreply, set_current_date(socket, state)}
   end
 
-  defp set_current_date(%{assigns: assigns} = socket) do
+  defp set_current_date(%{assigns: assigns} = socket, %{date: %Date{} = new_date}) do
     current_date = Map.get(assigns, :current_date, nil)
-    %Date{} = new_date = Clock.Server.date()
 
     if current_date == new_date do
       socket
