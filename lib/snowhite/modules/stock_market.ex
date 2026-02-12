@@ -5,8 +5,7 @@ defmodule Snowhite.Modules.StockMarket do
   alias __MODULE__.Symbol
 
   def mount(socket) do
-    send(self(), :updated)
-    socket = assign(socket, :prices, [])
+    socket = assign(socket, :prices, StockMarket.Server.state())
     {:ok, socket}
   end
 
@@ -49,8 +48,7 @@ defmodule Snowhite.Modules.StockMarket do
   defp color(value) when value < 0, do: "negative"
   defp color(_value), do: "even"
 
-  def handle_info(:updated, socket) do
-    prices = StockMarket.Server.prices()
+  def handle_info({:updated, prices}, socket) do
     socket = assign(socket, :prices, prices)
     {:noreply, socket}
   end

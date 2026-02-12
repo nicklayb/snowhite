@@ -1,83 +1,69 @@
 defmodule Snowhite.Modules.StockMarket.Server do
-  use GenServer
-
+  use Snowhite.StateServer, pubsub_topic: "snowhite:modules:stockmarket"
+  alias Snowhite.StateServer.Configuration
   alias Snowhite.Modules.StockMarket
 
-  @sync_timer :timer.minutes(5)
-
-  def start_link(opts) do
-    name =
-      case Keyword.get(opts, :name, __MODULE__) do
-        nil -> __MODULE__
-        name -> name
-      end
-
-    GenServer.start_link(__MODULE__, opts, name: name)
+  @default_update_timer :timer.minutes(5)
+  @impl Snowhite.StateServer
+  def init_configuration(options) do
+    update_timer = Keyword.get(options, :refresh, @default_update_timer)
+    %Configuration{update_timer: update_timer}
   end
 
-  def prices(name \\ __MODULE__) do
-    GenServer.call(name, :prices)
-  end
-
-  @impl GenServer
-  def init(options) do
-    send(self(), {:sync, true})
-
-    {:ok, init_state(options)}
-  end
-
-  @impl GenServer
-  def handle_info({:sync, force?}, state) do
-    state =
-      if force? or market_open?(state) do
-        state = update_prices(state)
-        Phoenix.PubSub.broadcast!(Snowhite.PubSub, "snowhite:modules:stockmarket", :updated)
-        state
-      else
-        state
-      end
-
-    Process.send_after(self(), {:sync, false}, @sync_timer)
-
-    {:noreply, state}
-  end
-
-  @impl GenServer
-  def handle_call(:prices, _, %{prices: prices} = state) do
-    {:reply, prices, state}
-  end
-
-  defp update_prices(
-         %{adapter: adapter, symbols: symbols, adapter_options: adapter_options, prices: prices} =
-           state
-       ) do
-    prices =
-      Enum.reduce(symbols, prices, fn symbol, acc ->
-        case StockMarket.Adapter.invoke(adapter, symbol, adapter_options) do
-          nil ->
-            acc
-
-          symbol_struct ->
-            Map.put(acc, symbol, symbol_struct)
-        end
-      end)
-
-    Map.put(state, :prices, prices)
-  end
-
-  defp init_state(options) do
+  @impl Snowhite.StateServer
+  def init_state(options) do
     symbols = Keyword.fetch!(options, :symbols)
     adapter = Keyword.fetch!(options, :adapter)
     timezone = Keyword.fetch!(options, :timezone)
     adapter_options = Keyword.get(options, :adapter_options, [])
 
-    %{
+    state = %{
       prices: %{},
       symbols: symbols,
       adapter: adapter,
       adapter_options: adapter_options,
-      timezone: timezone
+      timezone: timezone,
+      loaded: false
     }
+
+    {:ok, state}
+  end
+
+  @impl Snowhite.StateServer
+  def handle_state_call(%{prices: prices}, _configuration) do
+    prices
+  end
+
+  @impl Snowhite.StateServer
+  def handle_update(%{loaded: loaded} = state, _configuration) do
+    if not loaded or market_open?(state) do
+      async(state, :fetch_stocks, &update_prices/1)
+      {:ok, %{state | loaded: true}}
+    else
+      :ignore
+    end
+  end
+
+  @impl Snowhite.StateServer
+  def handle_async(:fetch_stocks, _ref, prices, state, _configuration) do
+    {:ok, %{state | prices: prices}}
+  end
+
+  defp update_prices(%{
+         adapter: adapter,
+         symbols: symbols,
+         adapter_options: adapter_options,
+         prices: prices
+       }) do
+    Enum.reduce(symbols, prices, fn symbol, acc ->
+      case StockMarket.Adapter.invoke(adapter, symbol, adapter_options) do
+        nil ->
+          acc
+
+        symbol_struct ->
+          Map.put(acc, symbol, symbol_struct)
+      end
+    end)
   end
 
   defp market_open?(%{timezone: timezone}) do

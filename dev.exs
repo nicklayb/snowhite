@@ -58,7 +58,7 @@ defmodule Snowhite.Profiles.Default do
     top_left: [
       Snowhite.Modules.Clock,
       Snowhite.Modules.Calendar,
-      {Snowhite.Modules.StockMarket, symbols: ["PENN", "MSFT", "VCN.TSX"]},
+      {Snowhite.Modules.StockMarket, symbols: ["NVDA", "VCN.TSX"]},
       {Snowhite.Modules.News,
        feeds: [
          {"L'Hebdo", "https://www.lhebdojournal.com/feed/rss2/"},
