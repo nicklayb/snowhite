@@ -23,17 +23,7 @@ defmodule SnowhiteWeb.Plug.PutProfile do
   defp get_profile(%Plug.Conn{} = conn, profiles) do
     profile_name = get_profile_name(conn)
 
-    if profile_exists?(profile_name, profiles) do
-      Map.get(profiles, String.to_existing_atom(profile_name))
-    else
-      nil
-    end
-  end
-
-  defp profile_exists?(lookup_profile, profiles) do
-    Enum.any?(profiles, fn {profile, _} ->
-      to_string(profile) == lookup_profile
-    end)
+    Map.get(profiles, profile_name)
   end
 
   @profile_header "x-snowhite-profile"

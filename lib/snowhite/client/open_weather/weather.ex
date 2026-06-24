@@ -3,6 +3,8 @@ defmodule Snowhite.Client.OpenWeather.Weather do
   defstruct @keys
   use Starchoice.Decoder
 
+  alias Snowhite.Client.OpenWeather
+
   defdecoder do
     field(:coord, with: OpenWeather.Coord)
     field(:weather, with: OpenWeather.Weather.WeatherItem)

@@ -57,7 +57,8 @@ defmodule Snowhite.MixProject do
       {:plug_cowboy, "~> 2.5", only: :dev},
       {:starchoice, "~> 0.2"},
       {:sweet_xml, "~> 0.6.6"},
-      {:timex, "~> 3.7.13"}
+      {:timex, "~> 3.7.13"},
+      {:yaml_elixir, "~> 2.12.0"}
     ]
   end
 

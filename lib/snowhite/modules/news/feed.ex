@@ -22,6 +22,10 @@ defmodule Snowhite.Modules.News.Feed do
     new(%{name: name, url: url, adapter: @default_adapter, options: %{}})
   end
 
+  def new(%{"name" => name, "url" => url}) do
+    new({name, url})
+  end
+
   def new(%{name: name, url: url, adapter: adapter, options: options}) do
     %Feed{name: name, url: url, adapter: adapter, options: options}
   end

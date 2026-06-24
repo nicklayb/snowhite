@@ -36,3 +36,4 @@ npm-debug.log
 /**/*/.DS_Store
 .nix-mix
 .nix-hex
+config.yaml

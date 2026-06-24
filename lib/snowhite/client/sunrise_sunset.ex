@@ -1,4 +1,5 @@
 defmodule Snowhite.Client.SunriseSunset do
+  alias Snowhite.Client.SunriseSunset
   require Logger
   @type coord :: {float(), float()}
   @spec get(coord(), DateTime.t()) :: {:ok, SunsetSunrise.Response.t()} | {:error, any()}

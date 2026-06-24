@@ -46,4 +46,10 @@ defmodule Snowhite.Builder.Layout do
     if position not in @positions, do: raise(ArgumentError, "Invalid #{position} position")
     MapHelpers.append(layout, position, module)
   end
+
+  def applications(%Layout{} = layout) do
+    layout
+    |> modules()
+    |> Enum.map(fn {module, _} -> module.applications end)
+  end
 end

@@ -2,6 +2,7 @@ defmodule Snowhite.Client.OpenWeather.Forecast.ForecastItem do
   @keys ~w(dt main weather)a
   defstruct @keys
   use Starchoice.Decoder
+  alias Snowhite.Client.OpenWeather
 
   defdecoder do
     field(:dt, with: &Timex.from_unix/1)

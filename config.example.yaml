@@ -1,0 +1,36 @@
+configuration:
+  refresh: 14400000 # 4 hours
+  city_id: "6167865"
+  units: metric
+  timezone: "America/Toronto"
+
+profiles:
+  default:
+    modules:
+      top_left:
+        - module: Snowhite.Modules.Clock
+        - module: Snowhite.Modules.Calendar
+        - module: Snowhite.Modules.StockMarket
+          params: 
+            symbols: ["NVDA", "VCN.TSX"]
+        - module: Snowhite.Modules.News
+          params:
+            feeds:
+              - name: "L'Hebdo"
+                url: "https://www.lhebdojournal.com/feed/rss2/"
+              - name: "RC"
+                url: "https://ici.radio-canada.ca/rss/4160"
+              - name: "La Presse"
+                url: "https://www.lapresse.ca/actualites/justice-et-faits-divers/rss"
+            persist_app: snowhite
+      top_right:
+        - module: Snowhite.Modules.Weather.Current
+        - module: Snowhite.Modules.Weather.Forecast
+        - module: Snowhite.Modules.Suntime
+          params:
+            latitude: 43.653225
+            longitude: -79.383186
+            
+
+
+

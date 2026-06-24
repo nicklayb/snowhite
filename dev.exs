@@ -1,4 +1,5 @@
 Logger.configure(level: :debug)
+require Logger
 
 Application.put_env(:snowhite, SnowhiteDemo.Endpoint,
   http: [port: System.get_env("PORT")],
@@ -159,9 +160,12 @@ Task.start(fn ->
   children = [
     {Phoenix.PubSub, [name: SnowhiteDemo.PubSub, adapter: Phoenix.PubSub.PG2]},
     SnowhiteDemo.Endpoint,
-    SnowhiteApp.ApplicationSupervisor
+    {Snowhite.ProfileProvider, file_path: "./config.yaml"}
+    # SnowhiteApp.ApplicationSupervisor
   ]
 
-  {:ok, _} = Supervisor.start_link(children, strategy: :one_for_one)
+  {:ok, supervisor_pid} = Supervisor.start_link(children, strategy: :one_for_one)
+
+  Logger.info("[DEV] Started #{inspect(supervisor_pid)}")
   Process.sleep(:infinity)
 end)

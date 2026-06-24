@@ -16,7 +16,12 @@ defmodule Snowhite.Builder.Controller do
         plug(:put_root_layout, {SnowhiteWeb.Layouts.View, :root})
 
         def put_profile(conn, _opts) do
-          PutProfile.call(conn, PutProfile.init(profiles: @parent_module.profiles()))
+          profiles =
+            Map.new(Snowhite.ProfileProvider.profiles(), fn {profile_name, _} ->
+              {profile_name, Snowhite.ProfileServer.layout(profile_name)}
+            end)
+
+          PutProfile.call(conn, PutProfile.init(profiles: profiles))
         end
 
         def index(%Plug.Conn{assigns: %{profile: profile}} = conn, params)

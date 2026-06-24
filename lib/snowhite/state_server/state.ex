@@ -4,6 +4,19 @@ defmodule Snowhite.StateServer.State do
   alias Snowhite.StateServer.Configuration
   alias Snowhite.StateServer.State
 
+  @type internal_state :: any()
+
+  @type t :: %State{
+          configuration: Configuration.t(),
+          internal_state: internal_state(),
+          pubsub_topic: any(),
+          name: any(),
+          module: module(),
+          update_timer: reference() | nil
+        }
+
+  @type configuration :: Configuration.t()
+
   def init(args) do
     {name, args} = Keyword.pop!(args, :name)
     {pubsub_topic, args} = Keyword.pop!(args, :pubsub_topic)

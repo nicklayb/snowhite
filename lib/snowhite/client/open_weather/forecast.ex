@@ -2,6 +2,7 @@ defmodule Snowhite.Client.OpenWeather.Forecast do
   @keys ~w(city list)a
   defstruct @keys
   use Starchoice.Decoder
+  alias Snowhite.Client.OpenWeather
 
   defdecoder do
     field(:city, with: OpenWeather.Forecast.City)

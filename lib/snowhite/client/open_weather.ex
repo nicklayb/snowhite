@@ -1,6 +1,8 @@
 defmodule Snowhite.Client.OpenWeather do
   require Logger
 
+  alias Snowhite.Client.OpenWeather
+
   @root_url "https://api.openweathermap.org/data/2.5"
   @current_weather_url "#{@root_url}/weather"
   @forecast_url "#{@root_url}/forecast"
