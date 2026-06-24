@@ -45,66 +45,9 @@ Application.put_env(:snowhite, SnowhiteDemo.Endpoint,
   ]
 )
 
-defmodule Snowhite.Profiles.Default do
-  use Snowhite.Builder.Profile
-
-  configure(
-    locale: "en",
-    city_id: "6167865",
-    units: :metric,
-    timezone: "America/Toronto"
-  )
-
-  modules(
-    top_left: [
-      Snowhite.Modules.Clock,
-      Snowhite.Modules.Calendar,
-      {Snowhite.Modules.StockMarket, symbols: ["NVDA", "VCN.TSX"]},
-      {Snowhite.Modules.News,
-       feeds: [
-         {"L'Hebdo", "https://www.lhebdojournal.com/feed/rss2/"},
-         {"RC", "https://ici.radio-canada.ca/rss/4159"},
-         {"La Presse; Justice et faits divers",
-          "https://www.lapresse.ca/actualites/justice-et-faits-divers/rss"}
-       ],
-       persist_app: :snowhite}
-    ],
-    top_right: [
-      {Snowhite.Modules.Weather.Current, refresh: ~d(4h)},
-      {Snowhite.Modules.Weather.Forecast, refresh: ~d(4h), display: :inline},
-      {Snowhite.Modules.Suntime, latitude: 43.653225, longitude: -79.383186}
-    ]
-  )
-end
-
-defmodule Snowhite.Profiles.Simple do
-  use Snowhite.Builder.Profile
-
-  configure(
-    locale: "en",
-    city_id: "6167865",
-    units: :metric,
-    timezone: "America/Toronto"
-  )
-
-  modules(
-    top_left: [
-      Snowhite.Modules.Clock,
-      Snowhite.Modules.Calendar
-    ]
-  )
-end
-
-defmodule SnowhiteApp do
-  use Snowhite, timezone: "America/Toronto"
-
-  profile(:default, Snowhite.Profiles.Default)
-  profile(:simple, Snowhite.Profiles.Simple)
-end
-
 defmodule SnowhiteDemo.Router do
   use Phoenix.Router
-  import Snowhite, only: [snowhite_router: 1]
+  use Snowhite.Controller
 
   pipeline :browser do
     plug(:accepts, ["html"])
@@ -118,8 +61,6 @@ defmodule SnowhiteDemo.Router do
   end
 
   pipe_through(:browser)
-
-  snowhite_router(SnowhiteApp)
 end
 
 defmodule SnowhiteDemo.Endpoint do
@@ -160,7 +101,7 @@ Task.start(fn ->
   children = [
     {Phoenix.PubSub, [name: SnowhiteDemo.PubSub, adapter: Phoenix.PubSub.PG2]},
     SnowhiteDemo.Endpoint,
-    {Snowhite.ProfileProvider, file_path: "./config.yaml"}
+    {Snowhite.Profile.Provider, file_path: "./config.yaml"}
     # SnowhiteApp.ApplicationSupervisor
   ]
 

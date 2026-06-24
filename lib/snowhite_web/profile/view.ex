@@ -3,22 +3,22 @@ defmodule SnowhiteWeb.Profile.View do
   Handles view logic of the rendered page for a given Profile.
   """
   use SnowhiteWeb, {:view, path: "profile/templates"}
-  alias Snowhite.Builder.Layout
+  alias Snowhite.Profile
   alias Snowhite.Helpers.Casing
 
   @doc """
   Converts a layout to a keyword list representation so it can be enumerable.
   """
-  @spec layout(Layout.t()) :: [{Layout.position(), [Layout.module_definition()]}]
+  @spec layout(Profile.t()) :: [{Profile.position(), [Profile.module_definition()]}]
   def layout(layout) do
-    Layout.positions()
+    Profile.positions()
     |> Enum.map(&{&1, Map.get(layout, &1, [])})
   end
 
   @doc """
   Gets pane's HTML classes based on it's position identifier. It sets the "pane" class along with it's horizontal and vertical identifiers. For instance, `top_left` pane would have `class="pane top left"`.
   """
-  @spec pane_class(Layout.position()) :: String.t()
+  @spec pane_class(Profile.position()) :: String.t()
   def pane_class(position) do
     [row, col] =
       position

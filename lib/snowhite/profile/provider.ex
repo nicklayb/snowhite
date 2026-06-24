@@ -1,4 +1,4 @@
-defmodule Snowhite.ProfileProvider do
+defmodule Snowhite.Profile.Provider do
   use Supervisor
 
   require Logger
@@ -20,7 +20,7 @@ defmodule Snowhite.ProfileProvider do
     profile_keys =
       Map.new(profiles, fn {_, options} ->
         profile_name = Keyword.fetch!(options, :profile_name)
-        {profile_name, Snowhite.ProfileServer.name(profile_name)}
+        {profile_name, Snowhite.Profile.Server.name(profile_name)}
       end)
 
     Supervisor.init(
@@ -59,7 +59,7 @@ defmodule Snowhite.ProfileProvider do
 
   defp build_profiles(%{"profiles" => profiles} = configuration) do
     Enum.map(profiles, fn {name, profile_config} ->
-      {Snowhite.ProfileServer,
+      {Snowhite.Profile.Server,
        [
          profile_name: name,
          global_configuration: Map.get(configuration, "configuration", %{}),

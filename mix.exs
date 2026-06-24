@@ -149,7 +149,6 @@ defmodule Snowhite.MixProject do
         Snowhite,
         Snowhite.Builder,
         Snowhite.Builder.Controller,
-        Snowhite.Builder.Layout,
         Snowhite.Builder.Module,
         Snowhite.Builder.Profile,
         Snowhite.Builder.Supervisor

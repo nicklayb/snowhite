@@ -2,11 +2,11 @@ defmodule SnowhiteWeb.Profile.ViewTest do
   use SnowhiteWeb.ConnCase
 
   alias SnowhiteWeb.Profile.View
-  alias Snowhite.Builder.Layout
+  alias Snowhite.Profile
 
   describe "layout/1" do
     test "should convert a layout to keyword list" do
-      layout = %Layout{top_left: [{ModuleOne, []}], bottom_right: [{ModuleTwo, []}]}
+      layout = %Profile{top_left: [{ModuleOne, []}], bottom_right: [{ModuleTwo, []}]}
 
       assert [
                top_left: [
@@ -39,7 +39,7 @@ defmodule SnowhiteWeb.Profile.ViewTest do
   ]
   describe "pane_class/1" do
     test "should return html classes for a given layout position" do
-      Enum.each(Layout.positions(), fn position ->
+      Enum.each(Profile.positions(), fn position ->
         value = Keyword.get(@expected, position)
         assert ^value = View.pane_class(position)
       end)

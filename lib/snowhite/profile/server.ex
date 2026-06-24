@@ -1,5 +1,5 @@
-defmodule Snowhite.ProfileServer do
-  alias Snowhite.Builder.Layout
+defmodule Snowhite.Profile.Server do
+  alias Snowhite.Profile
   use Supervisor
 
   require Logger
@@ -21,7 +21,7 @@ defmodule Snowhite.ProfileServer do
     with {:ok, layout} <- build_layout(configuration, global_configuration) do
       applications =
         layout
-        |> Layout.modules()
+        |> Profile.modules()
         |> Enum.flat_map(fn {module, options} ->
           module.applications(options)
         end)
@@ -50,7 +50,7 @@ defmodule Snowhite.ProfileServer do
   end
 
   defp build_layout(configuration, global_configuration) do
-    layout = %Layout{}
+    layout = %Profile{}
 
     configuration
     |> Map.get("modules", %{})
@@ -67,7 +67,7 @@ defmodule Snowhite.ProfileServer do
       options =
         cast_options(module_atom, Map.merge(global_configuration, Map.get(config, "params", %{})))
 
-      Layout.put_module(layout, position, {module_atom, options})
+      Profile.put_module(layout, position, {module_atom, options})
     end)
     |> then(&{:ok, &1})
   rescue

@@ -1,4 +1,4 @@
-defmodule Snowhite.Builder.Layout do
+defmodule Snowhite.Profile do
   @moduledoc """
   Represents modules disposition on a 3 by 3 layout. Modules are registered as {module, args}.
   """
@@ -10,7 +10,7 @@ defmodule Snowhite.Builder.Layout do
   )a
   alias Snowhite.Helpers.Map, as: MapHelpers
 
-  @type t :: %Layout{}
+  @type t :: %Profile{}
   @type position ::
           :top_left
           | :top_center
@@ -34,7 +34,7 @@ defmodule Snowhite.Builder.Layout do
   Gets all layout's modules without their positions
   """
   @spec modules(t()) :: [module_definition()]
-  def modules(%Layout{} = layout) do
+  def modules(%Profile{} = layout) do
     Enum.flat_map(positions(), &Map.get(layout, &1, []))
   end
 
@@ -42,12 +42,12 @@ defmodule Snowhite.Builder.Layout do
   Puts a module in a given layout in the right position. This is the main function used for building layouts
   """
   @spec put_module(t(), position(), module_definition()) :: t()
-  def put_module(%Layout{} = layout, position, module) do
+  def put_module(%Profile{} = layout, position, module) do
     if position not in @positions, do: raise(ArgumentError, "Invalid #{position} position")
     MapHelpers.append(layout, position, module)
   end
 
-  def applications(%Layout{} = layout) do
+  def applications(%Profile{} = layout) do
     layout
     |> modules()
     |> Enum.map(fn {module, _} -> module.applications end)

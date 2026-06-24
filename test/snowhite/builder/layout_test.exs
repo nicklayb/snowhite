@@ -1,7 +1,7 @@
-defmodule Snowhite.Builder.LayoutTest do
+defmodule Snowhite.ProfileTest do
   use Snowhite.TestCase
 
-  alias Snowhite.Builder.Layout
+  alias Snowhite.Profile
 
   describe "positions/0" do
     @positions ~w(
@@ -10,13 +10,13 @@ defmodule Snowhite.Builder.LayoutTest do
       bottom_left bottom_center bottom_right
     )a
     test "should get all possible positions" do
-      assert @positions = Layout.positions()
+      assert @positions = Profile.positions()
     end
   end
 
   describe "modules/1" do
     test "returns all modules of a given layout" do
-      layout = %Layout{
+      layout = %Profile{
         top_left: [
           {SomeModule, [1]}
         ],
@@ -25,22 +25,22 @@ defmodule Snowhite.Builder.LayoutTest do
         ]
       }
 
-      assert [{SomeModule, [1]}, {SomeOtherModule, [:some, :args]}] = Layout.modules(layout)
+      assert [{SomeModule, [1]}, {SomeOtherModule, [:some, :args]}] = Profile.modules(layout)
     end
   end
 
   describe "put_module/3" do
     test "should put a module to a given position" do
-      layout = %Layout{}
-      assert layout = Layout.put_module(layout, :top_left, {SomeModule, [1]})
-      assert %Layout{top_left: [{SomeModule, [1]}]} = layout
-      assert layout = Layout.put_module(layout, :top_left, {SomeOtherModule, [:some, :args]})
-      assert %Layout{top_left: [{SomeModule, [1]}, {SomeOtherModule, [:some, :args]}]} = layout
+      layout = %Profile{}
+      assert layout = Profile.put_module(layout, :top_left, {SomeModule, [1]})
+      assert %Profile{top_left: [{SomeModule, [1]}]} = layout
+      assert layout = Profile.put_module(layout, :top_left, {SomeOtherModule, [:some, :args]})
+      assert %Profile{top_left: [{SomeModule, [1]}, {SomeOtherModule, [:some, :args]}]} = layout
     end
 
     test "should raise if the position does not exists" do
       assert_raise ArgumentError, fn ->
-        Layout.put_module(%Layout{}, :middle_of_nowhere, {SomeModule, [1]})
+        Profile.put_module(%Profile{}, :middle_of_nowhere, {SomeModule, [1]})
       end
     end
   end
