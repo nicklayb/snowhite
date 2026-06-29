@@ -10,12 +10,12 @@ defmodule Snowhite.Profile.Provider do
   def init(args) do
     Logger.info("[#{__MODULE__}] Initializing #{inspect(args)}")
 
-    timezone = Keyword.get(args, :timezone, "UTC")
-
-    profiles =
+    {profiles, global_configuration} =
       args
       |> Keyword.fetch!(:file_path)
       |> load_chilren()
+
+    timezone = Map.get(global_configuration, "timezone", "UTC")
 
     profile_keys =
       Map.new(profiles, fn {_, options} ->
@@ -58,13 +58,18 @@ defmodule Snowhite.Profile.Provider do
   end
 
   defp build_profiles(%{"profiles" => profiles} = configuration) do
-    Enum.map(profiles, fn {name, profile_config} ->
-      {Snowhite.Profile.Server,
-       [
-         profile_name: name,
-         global_configuration: Map.get(configuration, "configuration", %{}),
-         configuration: profile_config
-       ]}
-    end)
+    global_configuration = Map.get(configuration, "configuration", %{})
+
+    profiles =
+      Enum.map(profiles, fn {name, profile_config} ->
+        {Snowhite.Profile.Server,
+         [
+           profile_name: name,
+           global_configuration: global_configuration,
+           configuration: profile_config
+         ]}
+      end)
+
+    {profiles, global_configuration}
   end
 end

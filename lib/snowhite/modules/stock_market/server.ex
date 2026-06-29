@@ -12,19 +12,8 @@ defmodule Snowhite.Modules.StockMarket.Server do
 
   @impl Snowhite.StateServer
   def init_state(options) do
-    symbols = Keyword.fetch!(options, :symbols)
-    adapter = Keyword.fetch!(options, :adapter)
-    timezone = Keyword.fetch!(options, :timezone)
-    adapter_options = Keyword.get(options, :adapter_options, [])
-
-    state = %{
-      prices: %{},
-      symbols: symbols,
-      adapter: adapter,
-      adapter_options: adapter_options,
-      timezone: timezone,
-      loaded: false
-    }
+    state =
+      options_to_state(%{loaded: false, prices: %{}}, StockMarket, options)
 
     {:ok, state}
   end

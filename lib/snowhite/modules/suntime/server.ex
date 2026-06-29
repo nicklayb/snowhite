@@ -4,59 +4,37 @@ defmodule Snowhite.Modules.Suntime.Server do
 
   Is updated every morning at 1am through scheduler
   """
-  use GenServer
-  alias Snowhite.Scheduler
+  use Snowhite.StateServer, pubsub_topic: "snowhite:modules:suntime"
   require Logger
+  alias Snowhite.StateServer.Configuration
 
-  @update_time {:at, ~T[01:00:00]}
-  @fallback_timezone "UTC"
-
-  def start_link(args) do
-    GenServer.start_link(__MODULE__, args, name: __MODULE__)
+  @impl Snowhite.StateServer
+  def init_configuration(_options) do
+    %Configuration{update_timer: {:schedule, {:at, ~T[00:05:00]}}}
   end
 
-  def update do
-    GenServer.cast(__MODULE__, :update)
+  @impl Snowhite.StateServer
+  def init_state(options) do
+    state = options_to_state(%{days: []}, Snowhite.Modules.Suntime, options)
+
+    {:ok, state}
   end
 
-  def days do
-    GenServer.call(__MODULE__, :days)
-  end
-
-  def init(options) do
-    tz = Keyword.get(options, :timezone, @fallback_timezone)
-    lat = Keyword.fetch!(options, :latitude)
-    lng = Keyword.fetch!(options, :longitude)
-    Logger.info("[#{inspect(__MODULE__)}] Started (#{inspect(options)})")
-    Scheduler.schedule(__MODULE__, @update_time, {self(), :update})
-    send(self(), :update)
-    {:ok, %{tz: tz, days: [], latitude: lat, longitude: lng}}
-  end
-
-  def handle_cast(:update, state) do
-    send(self(), :update)
-    {:noreply, state}
-  end
-
-  def handle_info(:update, state) do
-    send(self(), :notify)
+  @impl Snowhite.StateServer
+  def handle_update(state, _configuration) do
     days = call_api(state)
-    {:noreply, %{state | days: days}}
+    {:ok, %{state | days: days}}
   end
 
-  def handle_info(:notify, state) do
-    Phoenix.PubSub.broadcast!(Snowhite.PubSub, "snowhite:modules:suntime", :updated)
-    {:noreply, state}
-  end
-
-  def handle_call(:days, _, %{days: days} = state) do
-    {:reply, days, state}
+  @impl Snowhite.StateServer
+  def handle_state_call(%{days: days}, _configuration) do
+    days
   end
 
   @days 2
   @range 0..(@days - 1)
-  defp call_api(%{tz: tz} = state) do
-    date = Timex.now(tz)
+  defp call_api(%{timezone: timezone} = state) do
+    date = Timex.now(timezone)
 
     Enum.map(@range, fn modifier ->
       date = Timex.shift(date, days: modifier)
@@ -67,19 +45,19 @@ defmodule Snowhite.Modules.Suntime.Server do
     end)
   end
 
-  defp call_for_date(%{latitude: lat, longitude: lng, tz: tz}, date) do
+  defp call_for_date(%{latitude: lat, longitude: lng, timezone: timezone}, date) do
     case Snowhite.Client.SunriseSunset.get({lng, lat}, date) do
       {:ok, results} ->
-        map_results(results, tz)
+        map_results(results, timezone)
 
       _ ->
         %{sunrise: nil, sunset: nil}
     end
   end
 
-  defp map_results(%{sunrise: sunrise, sunset: sunset}, tz) do
+  defp map_results(%{sunrise: sunrise, sunset: sunset}, timezone) do
     %{sunrise: sunrise, sunset: sunset}
-    |> Enum.map(&as_timezoned_time(&1, tz))
+    |> Enum.map(&as_timezoned_time(&1, timezone))
     |> Enum.into(%{})
   end
 

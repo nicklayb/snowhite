@@ -141,4 +141,19 @@ defmodule Snowhite.StateServer do
 
     {pid, ref}
   end
+
+  def options_to_state(state, module, options) when is_atom(module) do
+    options_to_state(state, module.module_options(), options)
+  end
+
+  def options_to_state(state, module_options, provided_options)
+      when is_map(module_options) do
+    Enum.reduce(module_options, state, fn
+      {key, :required}, acc ->
+        Map.put(acc, key, Keyword.fetch!(provided_options, key))
+
+      {key, {:optional, default}}, acc ->
+        Map.put(acc, key, Keyword.get(provided_options, key, default))
+    end)
+  end
 end

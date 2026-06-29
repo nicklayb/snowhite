@@ -3,8 +3,10 @@ defmodule Snowhite.StateServer.Configuration do
 
   alias Snowhite.StateServer.Configuration
 
+  @type update_timer :: non_neg_integer() | {:schedule, Snowhite.Scheduler.Schedule.time_def()}
+
   @type t :: %Configuration{
-          update_timer: non_neg_integer() | nil,
+          update_timer: update_timer(),
           options: map()
         }
 end

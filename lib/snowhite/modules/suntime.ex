@@ -4,11 +4,7 @@ defmodule Snowhite.Modules.Suntime do
   alias __MODULE__
 
   def mount(socket) do
-    socket =
-      socket
-      |> assign(:days, [])
-
-    send(self(), :updated)
+    socket = assign(socket, :days, Suntime.Server.state())
 
     {:ok, socket}
   end
@@ -73,13 +69,8 @@ defmodule Snowhite.Modules.Suntime do
     Timex.lformat!(date, "{WDfull} {D} {Mshort}", locale)
   end
 
-  def handle_info(:updated, socket) do
-    {:noreply, update(socket)}
-  end
-
-  def update(socket) do
-    days = Suntime.Server.days()
-    assign(socket, :days, days)
+  def handle_info({:updated, days}, socket) do
+    {:noreply, assign(socket, :days, days)}
   end
 
   def applications(options) do

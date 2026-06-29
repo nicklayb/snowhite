@@ -9,9 +9,9 @@ defmodule Snowhite.Scheduler do
   end
 
   def init(opts) do
-    tz = Keyword.get(opts, :timezone, "UTC")
+    timezone = Keyword.get(opts, :timezone, "UTC")
     Process.send_after(self(), :tick, ~d(1s))
-    {:ok, %{schedule: %{}, tz: tz}}
+    {:ok, %{schedule: %{}, timezone: timezone}}
   end
 
   def schedule(name, time, message) do
@@ -56,7 +56,7 @@ defmodule Snowhite.Scheduler do
     send(pid, message)
   end
 
-  defp now(%{tz: tz}) do
-    Timex.now(tz)
+  defp now(%{timezone: timezone}) do
+    Timex.now(timezone)
   end
 end

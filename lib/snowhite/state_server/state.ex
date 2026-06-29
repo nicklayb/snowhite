@@ -1,6 +1,7 @@
 defmodule Snowhite.StateServer.State do
   defstruct [:configuration, :pubsub_topic, :update_timer, :module, :name, :internal_state]
 
+  alias Snowhite.Scheduler
   alias Snowhite.StateServer.Configuration
   alias Snowhite.StateServer.State
 
@@ -12,7 +13,7 @@ defmodule Snowhite.StateServer.State do
           pubsub_topic: any(),
           name: any(),
           module: module(),
-          update_timer: reference() | nil
+          update_timer: reference() | :daily | nil
         }
 
   @type configuration :: Configuration.t()
@@ -39,6 +40,21 @@ defmodule Snowhite.StateServer.State do
     if is_reference(update_timer), do: Process.cancel_timer(update_timer)
     update_timer = Process.send_after(self(), {:"$state_server", :update}, timer)
     %State{state | update_timer: update_timer}
+  end
+
+  def schedule_update(
+        %State{
+          update_timer: current_update_timer,
+          configuration: %Configuration{update_timer: {:schedule, time}}
+        } = state
+      ) do
+    if is_nil(current_update_timer) or is_reference(current_update_timer) do
+      Scheduler.schedule(__MODULE__, time, {self(), {:"$state_server", :update}})
+      send(self(), {:"$state_server", :update})
+      %State{state | update_timer: {:schedule, time}}
+    else
+      state
+    end
   end
 
   def schedule_update(%State{configuration: %Configuration{update_timer: update_timer}} = state) do
