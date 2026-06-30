@@ -95,7 +95,9 @@ Application.put_env(:snowhite, Snowhite.Client.Finnhub,
   api_key: System.get_env("FINNHUB_API_KEY")
 )
 
-Application.put_env(:snowhite, Snowhite.UrlShortener, url_shortener: Snowhite.UrlShortener.Noop)
+Application.put_env(:snowhite, Snowhite.UrlShortener,
+  url_shortener: Snowhite.Client.UrlShortener.Noop
+)
 
 Task.start(fn ->
   children = [

@@ -1,4 +1,17 @@
 defmodule Snowhite.StateServer do
+  @moduledoc """
+  State servers are GenServer holding a state and notifying on changes. It just does some specific things
+  differently from a genserver like auto broadcasting on changes.
+
+  ## Internal state
+
+  State server wraps the module's state inside another server's state to
+  track changes and notify on changes.
+
+  The internal state will contain client's data but can also contain stuff for the server
+  itself. If you would want to hide this, you can alter what the clients are receiving by
+  overriding `handle_state_call/3`.
+  """
   @behaviour GenServer
   alias Snowhite.StateServer.State
 
@@ -11,16 +24,29 @@ defmodule Snowhite.StateServer do
           {:ok, internal_state()}
           | {:ok, internal_state(), configuration()}
 
+  @doc "Inits the internal state. Make sure to provide an empty initial state the client can handle."
+  @callback init_state(Keyword.t()) :: {:ok, internal_state()} | :ignore
+
+  @doc "Inits the configuration, this is where you set the refresh time for auto reloading modules"
+  @callback init_configuration(Keyword.t()) :: configuration()
+
+  @doc "Handles an update trigger. This should call whatever external services in order to update its internal state"
   @callback handle_update(internal_state(), configuration()) ::
               success()
               | {:error, any}
               | :ignore
+
+  @doc "Handles any incoming messages, mostly used for inter-process communication"
   @callback handle_message(any(), internal_state(), configuration()) :: success() | :ignore
+
+  @doc "Handles an async update, this mechanism can provide parallelism inside of the server when multiple calls are necessary."
   @callback handle_async(any(), reference(), any(), internal_state(), configuration()) ::
               success() | :ignore
+
+  @doc "Handles a 'trigger' call, which is a simple `cast` call."
   @callback handle_trigger(any(), internal_state(), configuration()) :: success() | :ignore
-  @callback init_state(Keyword.t()) :: {:ok, internal_state()} | :ignore
-  @callback init_configuration(Keyword.t()) :: configuration()
+
+  @doc "Handles a state call, how you want your internal state to be exposed to clients."
   @callback handle_state_call(internal_state(), configuration()) :: any()
 
   defmacro __using__(options) do
@@ -48,7 +74,7 @@ defmodule Snowhite.StateServer do
       def state(pid \\ __MODULE__), do: GenServer.call(pid, {:"$state_server", :state})
 
       def trigger(pid \\ __MODULE__, message),
-        do: GenServer.call(pid, {:"$state_server", :trigger, message})
+        do: GenServer.cast(pid, {:"$state_server", :trigger, message})
 
       def handle_message(_message, _state, _configuration), do: :ignore
 

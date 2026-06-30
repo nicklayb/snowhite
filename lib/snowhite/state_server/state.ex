@@ -36,25 +36,29 @@ defmodule Snowhite.StateServer.State do
     end
   end
 
-  def schedule_update(%State{update_timer: update_timer} = state, timer) do
-    if is_reference(update_timer), do: Process.cancel_timer(update_timer)
-    update_timer = Process.send_after(self(), {:"$state_server", :update}, timer)
-    %State{state | update_timer: update_timer}
-  end
-
   def schedule_update(
         %State{
           update_timer: current_update_timer,
           configuration: %Configuration{update_timer: {:schedule, time}}
-        } = state
+        } = state,
+        _timer
       ) do
     if is_nil(current_update_timer) or is_reference(current_update_timer) do
-      Scheduler.schedule(__MODULE__, time, {self(), {:"$state_server", :update}})
+      Scheduler.schedule(state.module, time, {self(), {:"$state_server", :update}},
+        monitor: self()
+      )
+
       send(self(), {:"$state_server", :update})
       %State{state | update_timer: {:schedule, time}}
     else
       state
     end
+  end
+
+  def schedule_update(%State{update_timer: update_timer} = state, timer) do
+    if is_reference(update_timer), do: Process.cancel_timer(update_timer)
+    update_timer = Process.send_after(self(), {:"$state_server", :update}, timer)
+    %State{state | update_timer: update_timer}
   end
 
   def schedule_update(%State{configuration: %Configuration{update_timer: update_timer}} = state) do

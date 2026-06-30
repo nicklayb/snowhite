@@ -55,7 +55,7 @@ defmodule Snowhite.UrlShortener do
     url_shortener = url_shortener()
 
     with {:ok, short_url} <- url_shortener.shorten(url) do
-      Logger.info("[#{inspect(__MODULE__)}] [#{inspect(url_shortener)}] #{url} -> #{short_url}")
+      Logger.debug("[#{inspect(__MODULE__)}] [#{inspect(url_shortener)}] #{url} -> #{short_url}")
       {:ok, short_url}
     else
       {:error, data} ->
@@ -113,6 +113,6 @@ defmodule Snowhite.UrlShortener do
   defp url_shortener do
     :snowhite
     |> Application.get_env(__MODULE__, [])
-    |> Keyword.get(:url_shortener, __MODULE__.Bitly)
+    |> Keyword.get(:url_shortener, Snowhite.Client.UrlShortener.Bitly)
   end
 end
